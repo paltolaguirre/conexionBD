@@ -1,4 +1,4 @@
-module github.com/conexionBD
+module github.com/xubiosueldos/conexionBD
 
 require (
 	github.com/jinzhu/gorm v1.9.2

@@ -10,7 +10,7 @@ var db *gorm.DB
 var err error
 
 
-func connectBD()(*gorm.DB){
+func ConnectBD()(*gorm.DB){
 
 	db, err = gorm.Open("postgres", "host=192.168.30.111 port=5432 user=postgres dbname=DES_MULTITENANT_AR_1 password=Post66MM/")
 

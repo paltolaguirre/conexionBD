@@ -10,7 +10,7 @@ var err error
 
 func ConnectBD(tenant string) *gorm.DB {
 
-	db, err = gorm.Open("postgres", "host=192.168.30.111 port=5432 user=postgres dbname=faf_multitenant_go password=Post66MM/")
+	db, err = gorm.Open("postgres", "host=190.55.124.44 port=5432 user=postgres dbname=faf_multitenant_go password=Post66MM/")
 
 	if err != nil {
 		panic("failed to connect database")

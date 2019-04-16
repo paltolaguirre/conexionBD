@@ -3,7 +3,6 @@ package conexionBD
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/xubiosueldos/legajo/structLegajo"
 )
 
 var db *gorm.DB
@@ -16,11 +15,7 @@ func ConnectBD(tenant string) *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.Exec("SET search_path = ?", tenant)
-	db.AutoMigrate(&structLegajo.Pais{}, &structLegajo.Provincia{}, &structLegajo.Localidad{}, &structLegajo.Zona{}, &structLegajo.Modalidadcontratacion{}, &structLegajo.Situacion{}, &structLegajo.Condicion{}, &structLegajo.Condicionsiniestrado{}, &structLegajo.Conveniocolectivo{}, &structLegajo.Centrodecosto{}, &structLegajo.Obrasocial{}, &structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
-
-	db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
-	db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
+	db.Exec("SET search_path = " + tenant)
 
 	return db
 }

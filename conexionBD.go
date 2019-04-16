@@ -15,7 +15,7 @@ func ConnectBD(tenant string) *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	//db.Exec("SET search_path = ?", tenant)
+	db.Exec("SET search_path = ?", tenant)
 
 	return db
 }

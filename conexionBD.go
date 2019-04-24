@@ -16,16 +16,25 @@ func ConnectBD(tenant string) *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.Exec("SET search_path = " + tenant)
 
 	db.SingularTable(true)
+	db.Exec("SET search_path = " + tenant)
 
-	db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
+	if tenant == "public" {
+		//para actualizar tablas...agrega columnas e indices, pero no elimina
+		db.AutoMigrate(&structLegajo.Pais{}, &structLegajo.Provincia{}, &structLegajo.Localidad{}, &structLegajo.Zona{}, &structLegajo.Modalidadcontratacion{}, &structLegajo.Situacion{}, &structLegajo.Condicion{}, &structLegajo.Condicionsiniestrado{}, &structLegajo.Conveniocolectivo{}, &structLegajo.Centrodecosto{}, &structLegajo.Obrasocial{})
 
-	db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
-	db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
+	} else {
 
-	db.Exec("SET search_path = " + tenant + ",public")
+		//para actualizar tablas...agrega columnas e indices, pero no elimina
+		db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
+
+		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
+		db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
+
+		db.Exec("SET search_path = " + tenant + ",public")
+
+	}
 
 	return db
 }

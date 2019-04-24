@@ -26,14 +26,12 @@ func ConnectBD(tenant string) *gorm.DB {
 		db.AutoMigrate(&structLegajo.Pais{}, &structLegajo.Provincia{}, &structLegajo.Localidad{}, &structLegajo.Zona{}, &structLegajo.Modalidadcontratacion{}, &structLegajo.Situacion{}, &structLegajo.Condicion{}, &structLegajo.Condicionsiniestrado{}, &structLegajo.Conveniocolectivo{}, &structLegajo.Centrodecosto{}, &structLegajo.Obrasocial{})
 
 	} else {
-
+		db.Exec("SET search_path = " + tenant + ",public")
 		//para actualizar tablas...agrega columnas e indices, pero no elimina
 		db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
 
 		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
 		db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
-
-		db.Model(&structLegajo.Legajo{}).AddForeignKey("public.localidad.id", "public.localidad(id)", "CASCADE", "CASCADE")
 
 		db.Exec("SET search_path = " + tenant + ",public")
 

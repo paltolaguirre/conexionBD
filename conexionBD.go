@@ -16,6 +16,7 @@ func ConnectBD(tenant string) *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
+	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
 
 	db.SingularTable(true)
 	db.Exec("SET search_path = " + tenant)

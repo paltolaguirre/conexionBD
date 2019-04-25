@@ -19,9 +19,10 @@ func ConnectBD(tenant string) *gorm.DB {
 	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
 
 	db.SingularTable(true)
-	db.Exec("SET search_path = " + tenant)
 
 	if tenant == "public" {
+
+		db.Exec("SET search_path = " + tenant)
 		//para actualizar tablas...agrega columnas e indices, pero no elimina
 		db.AutoMigrate(&structLegajo.Pais{}, &structLegajo.Provincia{}, &structLegajo.Localidad{}, &structLegajo.Zona{}, &structLegajo.Modalidadcontratacion{}, &structLegajo.Situacion{}, &structLegajo.Condicion{}, &structLegajo.Condicionsiniestrado{}, &structLegajo.Conveniocolectivo{}, &structLegajo.Centrodecosto{}, &structLegajo.Obrasocial{})
 
@@ -30,10 +31,10 @@ func ConnectBD(tenant string) *gorm.DB {
 		//para actualizar tablas...agrega columnas e indices, pero no elimina
 		db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
 
-		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
+		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "RESTRICT", "RESTRICT")
 		db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
 
-		db.Exec("SET search_path = " + tenant + ",public")
+		//db.Exec("SET search_path = " + tenant + ",public")
 
 	}
 

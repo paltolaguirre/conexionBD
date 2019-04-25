@@ -31,7 +31,7 @@ func ConnectBD(tenant string) *gorm.DB {
 		//para actualizar tablas...agrega columnas e indices, pero no elimina
 		db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{})
 
-		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "RESTRICT", "RESTRICT")
+		db.Model(&structLegajo.Hijo{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
 		db.Model(&structLegajo.Conyuge{}).AddForeignKey("legajoid", "legajo(id)", "CASCADE", "CASCADE")
 
 		//db.Exec("SET search_path = " + tenant + ",public")

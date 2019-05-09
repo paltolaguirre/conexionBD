@@ -3,6 +3,7 @@ package conexionBD
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/xubiosueldos/framework/configuracion"
 )
 
 var db *gorm.DB
@@ -10,7 +11,9 @@ var err error
 
 func ConnectBD(tenant string) *gorm.DB {
 
-	db, err = gorm.Open("postgres", "host=192.168.30.111 port=5432 user=postgres dbname=faf_multitenant_go password=Post66MM/")
+	configuracion := configuracion.GetInstance()
+
+	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+"port=5432 user=postgres dbname="+configuracion.Namedb+"password=Post66MM/")
 
 	if err != nil {
 		panic("failed to connect database")

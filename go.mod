@@ -2,5 +2,6 @@ module github.com/xubiosueldos/conexionBD
 
 require (
 	github.com/jinzhu/gorm v1.9.2
-	github.com/xubiosueldos/legajo v1.0.1-0.20190412135527-8b5c7d2da8bc
+	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
+	github.com/lib/pq v1.1.0 // indirect
 )

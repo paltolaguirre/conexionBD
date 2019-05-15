@@ -1,4 +1,4 @@
-package structModelGorm
+package structGormModel
 
 import "time"
 

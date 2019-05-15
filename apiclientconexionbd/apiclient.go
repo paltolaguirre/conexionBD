@@ -6,7 +6,7 @@ import (
 	"github.com/xubiosueldos/conexionBD"
 )
 
-func obtenerDB(tokenAutenticacion *publico.Security) *gorm.DB {
+func ObtenerDB(tokenAutenticacion *publico.Security) *gorm.DB {
 
 	token := *tokenAutenticacion
 	tenant := token.Tenant

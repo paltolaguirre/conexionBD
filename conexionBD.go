@@ -1,6 +1,7 @@
 package conexionBD
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -15,8 +16,9 @@ var mapaConexiones = make(map[string]*gorm.DB)
 func ConnectBD(tenant string) *gorm.DB {
 
 	db = obtenerDBdelMapa(tenant)
-	e := db.DB().Ping()
-	if e == nil {
+	pingErr := db.DB().Ping()
+	if pingErr != nil {
+		fmt.Println(pingErr)
 		db = nil
 		mapaConexiones[tenant] = nil
 	}

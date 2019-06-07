@@ -15,6 +15,11 @@ var mapaConexiones = make(map[string]*gorm.DB)
 func ConnectBD(tenant string) *gorm.DB {
 
 	db = obtenerDBdelMapa(tenant)
+	e := db.DB().Ping
+	if e == nil {
+		db = nil
+		mapaConexiones[tenant] = nil
+	}
 
 	if db == nil {
 

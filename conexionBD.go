@@ -8,42 +8,44 @@ import (
 
 var db *gorm.DB
 var err error
-var mapaConexiones = make(map[string]*gorm.DB)
+
+//var mapaConexiones = make(map[string]*gorm.DB)
 
 func ConnectBD(tenant string) *gorm.DB {
 
-	db = obtenerDBdelMapa(tenant)
+	//db = obtenerDBdelMapa(tenant)
 
-	if db == nil {
+	//if db == nil {
 
-		configuracion := configuracion.GetInstance()
+	configuracion := configuracion.GetInstance()
 
-		db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)
+	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)
 
-		if err != nil {
-			panic("failed to connect database")
-		}
-
-		//Crea el schema si no existe
-		db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
-
-		db.SingularTable(true)
-
-		if tenant == "public" {
-
-			db.Exec("SET search_path = " + tenant)
-
-		} else {
-			db.Exec("SET search_path = " + tenant + ",public")
-		}
-
-		//guardar en el mapa a db
-		mapaConexiones[tenant] = db
+	if err != nil {
+		panic("failed to connect database")
 	}
+
+	//Crea el schema si no existe
+	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
+
+	db.SingularTable(true)
+
+	if tenant == "public" {
+
+		db.Exec("SET search_path = " + tenant)
+
+	} else {
+		db.Exec("SET search_path = " + tenant + ",public")
+	}
+
+	//guardar en el mapa a db
+	//	mapaConexiones[tenant] = db
+	//	}
 
 	return db
 }
 
-func obtenerDBdelMapa(tenant string) *gorm.DB {
+/*func obtenerDBdelMapa(tenant string) *gorm.DB {
 	return mapaConexiones[tenant]
 }
+*/

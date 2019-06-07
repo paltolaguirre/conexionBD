@@ -12,7 +12,7 @@ var mapaConexiones = make(map[string]*gorm.DB)
 
 func ConnectBD(tenant string) *gorm.DB {
 
-	//db = obtenerDBdelMapa(tenant)
+	db = obtenerDBdelMapa(tenant)
 
 	if db == nil {
 

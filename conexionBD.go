@@ -1,6 +1,8 @@
 package conexionBD
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/xubiosueldos/framework/configuracion"
@@ -23,7 +25,9 @@ func ConnectBD(tenant string) *gorm.DB {
 		if err != nil {
 			panic("failed to connect database")
 		}
-
+		db.DB().SetConnMaxLifetime(time.Second * 60)
+		//db.DB().SetMaxIdleConns()
+		//db.DB().SetMaxOpenConns()
 		//Crea el schema si no existe
 		db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
 

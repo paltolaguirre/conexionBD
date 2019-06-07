@@ -18,7 +18,7 @@ func ConnectBD(tenant string) *gorm.DB {
 	db = obtenerDBdelMapa(tenant)
 	if db != nil {
 		pingErr := db.DB().Ping()
-		if pingErr == nil {
+		if pingErr != nil {
 			fmt.Println(pingErr)
 			db = nil
 			mapaConexiones[tenant] = nil

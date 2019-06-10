@@ -34,8 +34,13 @@ func ConnectBD(tenant string) *gorm.DB {
 			cancel()
 		*/
 
-		algo := db.Exec("Select 1")
-		fmt.Println(algo)
+		e := db.Exec("Select 1").Error
+		if e != nil {
+			db = nil
+			mapaConexiones[tenant] = nil
+			fmt.Println(e)
+		}
+
 	}
 	if db == nil {
 

@@ -1,7 +1,7 @@
 package conexionBD
 
 import (
-	"fmt"
+	"context"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -17,12 +17,19 @@ func ConnectBD(tenant string) *gorm.DB {
 
 	db = obtenerDBdelMapa(tenant)
 	if db != nil {
-		pingErr := db.DB().Ping()
-		if pingErr != nil {
-			fmt.Println(pingErr)
+		/*	pingErr := db.DB().Ping()
+			if pingErr != nil {
+				db = nil
+				mapaConexiones[tenant] = nil
+			}*/
+		ctx := context.Background()
+		ctx, cancel := context.WithTimeout(ctx, time.Millisecond)
+		err := db.DB().PingContext(ctx)
+		if err != nil {
 			db = nil
 			mapaConexiones[tenant] = nil
 		}
+		cancel()
 	}
 	if db == nil {
 
@@ -33,7 +40,7 @@ func ConnectBD(tenant string) *gorm.DB {
 		if err != nil {
 			panic("failed to connect database")
 		}
-		db.DB().SetConnMaxLifetime(time.Second * 60)
+		db.DB().SetConnMaxLifetime(time.Second * 120)
 		//db.DB().SetMaxIdleConns()
 		//db.DB().SetMaxOpenConns()
 		//Crea el schema si no existe

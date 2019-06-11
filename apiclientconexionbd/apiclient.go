@@ -27,3 +27,7 @@ func crearTablaVersionMicroServicioYPrivadas(nombreMicroservicio string, version
 	}
 
 }
+
+func CerrarDB(db *gorm.DB) {
+	db.DB().Close()
+}

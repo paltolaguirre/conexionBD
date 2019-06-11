@@ -1,7 +1,6 @@
 package conexionBD
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -17,29 +16,29 @@ func ConnectBD(tenant string) *gorm.DB {
 
 	db = obtenerDBdelMapa(tenant)
 	if db != nil {
-		/*	Ping
-			pingErr := db.DB().Ping()
-			if pingErr != nil {
-				db = nil
-				mapaConexiones[tenant] = nil
-			}*/
-		/*	Ping Context
-			ctx := context.Background()
-			ctx, cancel := context.WithTimeout(ctx, time.Millisecond)
-			err := db.DB().PingContext(ctx)
-			if err != nil {
-				db = nil
-				mapaConexiones[tenant] = nil
-			}
-			cancel()
-		*/
-
-		e := db.Raw("Select 1").Error
-		if e != nil {
+		//	Ping
+		pingErr := db.DB().Ping()
+		if pingErr != nil {
 			db = nil
 			mapaConexiones[tenant] = nil
-			fmt.Println(e)
 		}
+		/*	Ping Context
+				ctx := context.Background()
+				ctx, cancel := context.WithTimeout(ctx, time.Millisecond)
+				err := db.DB().PingContext(ctx)
+				if err != nil {
+					db = nil
+					mapaConexiones[tenant] = nil
+				}
+				cancel()
+
+
+			e := db.Raw("Select 1").Error
+			if e != nil {
+				db = nil
+				mapaConexiones[tenant] = nil
+				fmt.Println(e)
+			}*/
 
 	}
 	if db == nil {

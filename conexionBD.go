@@ -8,11 +8,10 @@ import (
 	"github.com/xubiosueldos/framework/configuracion"
 )
 
-var db *gorm.DB
-var err error
-
 func ConnectBD(tenant string) *gorm.DB {
-
+	var db *gorm.DB
+	var err error
+	
 	configuracion := configuracion.GetInstance()
 
 	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)

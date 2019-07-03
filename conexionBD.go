@@ -1,16 +1,17 @@
 package conexionBD
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/xubiosueldos/framework/configuracion"
 )
 
-var db *gorm.DB
-var err error
-
 func ConnectBD(tenant string) *gorm.DB {
-
+	var db *gorm.DB
+	var err error
+	
 	configuracion := configuracion.GetInstance()
 
 	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)
@@ -18,7 +19,9 @@ func ConnectBD(tenant string) *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
+	db.DB().SetConnMaxLifetime(time.Second * 120)
+	//db.DB().SetMaxIdleConns()
+	//db.DB().SetMaxOpenConns()
 	//Crea el schema si no existe
 	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
 

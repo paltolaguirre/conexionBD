@@ -26,7 +26,7 @@ func UltimaVersion(nombre string, db *gorm.DB) int {
 
 }
 
-func ActualizarVersionMicroservicio(db *gorm.DB, versionMicroservicio int, nombreMicroservicio string) {
+func ActualizarMicroservicioVersionDB(db *gorm.DB, versionMicroservicio int, nombreMicroservicio string) {
 
 	var versiondbmicroservicio Versiondbmicroservicio
 
@@ -37,4 +37,10 @@ func ActualizarVersionMicroservicio(db *gorm.DB, versionMicroservicio int, nombr
 
 	db.Save(&versiondbmicroservicio)
 
+}
+
+func ActualizarVersionMicroservicio(versionMicroservicioConfiguracion int, versionMicroservicioDB int, nombreMicroservicio string, db *gorm.DB) {
+	if versionMicroservicioConfiguracion > versionMicroservicioDB {
+		ActualizarMicroservicioVersionDB(db, versionMicroservicioConfiguracion, nombreMicroservicio)
+	}
 }

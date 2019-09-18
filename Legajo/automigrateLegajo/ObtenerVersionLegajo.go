@@ -6,11 +6,15 @@ import (
 	"github.com/xubiosueldos/framework/configuracion"
 )
 
+const (
+	Legajo = "legajo"
+)
+
 func ObtenerVersionLegajoDB(db *gorm.DB) int {
-	return versiondbmicroservicio.UltimaVersion("legajo", db)
+	return versiondbmicroservicio.UltimaVersion(Legajo, db)
 }
 
-func ObtenerVersionLegajoConfiguracion(db *gorm.DB) int {
+func ObtenerVersionLegajoConfiguracion() int {
 	configuracion := configuracion.GetInstance()
 
 	return configuracion.Versionlegajo

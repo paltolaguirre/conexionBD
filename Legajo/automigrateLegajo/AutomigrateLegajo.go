@@ -5,7 +5,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/Legajo/structLegajo"
 )
 
-func AutomigrateLegajoPrivadas(db *gorm.DB) error {
+func AutomigrateLegajoTablasPrivadas(db *gorm.DB) error {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structLegajo.Conyuge{}, &structLegajo.Hijo{}, &structLegajo.Legajo{}).Error
@@ -16,7 +16,7 @@ func AutomigrateLegajoPrivadas(db *gorm.DB) error {
 	return err
 }
 
-func AutomigrateLegajoPublicas(db *gorm.DB) error {
+func AutomigrateLegajoTablasPublicas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structLegajo.Pais{}, &structLegajo.Provincia{}, &structLegajo.Localidad{}, &structLegajo.Modalidadcontratacion{}, &structLegajo.Situacion{}, &structLegajo.Condicion{}, &structLegajo.Condicionsiniestrado{}, &structLegajo.Obrasocial{}).Error
 	return err

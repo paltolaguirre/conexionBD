@@ -6,11 +6,15 @@ import (
 	"github.com/xubiosueldos/framework/configuracion"
 )
 
+const (
+	Security = "security"
+)
+
 func ObtenerVersionAutenticacionDB(db *gorm.DB) int {
-	return versiondbmicroservicio.UltimaVersion("security", db)
+	return versiondbmicroservicio.UltimaVersion(Security, db)
 }
 
-func ObtenerVersionAutenticacionConfiguracion(db *gorm.DB) int {
+func ObtenerVersionAutenticacionConfiguracion() int {
 	configuracion := configuracion.GetInstance()
 
 	return configuracion.Versionsecurity

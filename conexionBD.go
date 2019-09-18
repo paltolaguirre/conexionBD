@@ -11,7 +11,7 @@ import (
 func ConnectBD(tenant string) *gorm.DB {
 	var db *gorm.DB
 	var err error
-	
+
 	configuracion := configuracion.GetInstance()
 
 	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)
@@ -36,4 +36,12 @@ func ConnectBD(tenant string) *gorm.DB {
 	}
 
 	return db
+}
+
+func ObtenerDB(tenant string) *gorm.DB {
+	return ConnectBD(tenant)
+}
+
+func CerrarDB(db *gorm.DB) {
+	db.DB().Close()
 }

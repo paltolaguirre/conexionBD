@@ -6,11 +6,15 @@ import (
 	"github.com/xubiosueldos/framework/configuracion"
 )
 
+const (
+	Concepto = "concepto"
+)
+
 func ObtenerVersionConceptoDB(db *gorm.DB) int {
-	return versiondbmicroservicio.UltimaVersion("concepto", db)
+	return versiondbmicroservicio.UltimaVersion(Concepto, db)
 }
 
-func ObtenerVersionConceptoConfiguracion(db *gorm.DB) int {
+func ObtenerVersionConceptoConfiguracion() int {
 	configuracion := configuracion.GetInstance()
 
 	return configuracion.Versionconcepto

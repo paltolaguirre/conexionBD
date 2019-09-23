@@ -2,29 +2,101 @@ package apiclientconexionbd
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/xubiosueldos/conexionBD"
+	"github.com/xubiosueldos/conexionBD/Autenticacion/automigrateAutenticacion"
+	"github.com/xubiosueldos/conexionBD/Concepto/automigrateConcepto"
+	"github.com/xubiosueldos/conexionBD/Legajo/automigrateLegajo"
+	"github.com/xubiosueldos/conexionBD/Liquidacion/automigrateLiquidacion"
+	"github.com/xubiosueldos/conexionBD/Novedad/automigrateNovedad"
 	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
 
-func ObtenerDB(tenant string, nombreMicroservicio string, versionMicroservicio int, automigrateTablasPrivadas func(*gorm.DB)) *gorm.DB {
+func AutomigrateTablaSecurity(db *gorm.DB) error {
+	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	db := conexionBD.ConnectBD(tenant)
+	err := automigrateAutenticacion.AutomigrateAutenticacionTablaSecurity(db)
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.ObtenerVersionAutenticacionDB(db)) {
+		if err == nil {
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.Security, db)
+		}
+	}
+	return err
 
-	crearTablaVersionMicroServicioYPrivadas(nombreMicroservicio, versionMicroservicio, automigrateTablasPrivadas, db)
-
-	return db
 }
-func crearTablaVersionMicroServicioYPrivadas(nombreMicroservicio string, versionMicroservicio int, automigrateTablasPrivadas func(*gorm.DB), db *gorm.DB) {
+
+func AutomigrateTablasPublicas(db *gorm.DB) error {
+	var err error
 
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	if versionMicroservicio > versiondbmicroservicio.UltimaVersion(nombreMicroservicio, db) {
-		automigrateTablasPrivadas(db)
-		versiondbmicroservicio.ActualizarVersionMicroservicio(db, versionMicroservicio, nombreMicroservicio)
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
+
+		if err = automigrateLegajo.AutomigrateLegajoTablasPublicas(db); err != nil {
+			return err
+		} else {
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.Legajo, db)
+		}
+	}
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
+
+		if err = automigrateConcepto.AutomigrateConceptoTablasPublicas(db); err != nil {
+			return err
+		} else {
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.Concepto, db)
+		}
 	}
 
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.ObtenerVersionLiquidacionDB(db)) {
+
+		if err = automigrateLiquidacion.AutomigrateLiquidacionTablasPublicas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.Liquidacion, db)
+		}
+	}
+
+	return err
 }
 
-func CerrarDB(db *gorm.DB) {
-	db.DB().Close()
+func AutomigrateTablasPrivadas(db *gorm.DB) error {
+	var err error
+
+	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
+
+		if err = automigrateLegajo.AutomigrateLegajoTablasPrivadas(db); err != nil {
+			return err
+		} else {
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.Legajo, db)
+		}
+	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
+
+		if err = automigrateConcepto.AutomigrateConceptoTablasPrivadas(db); err != nil {
+			return err
+		} else {
+			automigrateConcepto.ObtenerConceptosPublicos(db)
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.Concepto, db)
+		}
+	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateNovedad.ObtenerVersionNovedadConfiguracion(), automigrateNovedad.ObtenerVersionNovedadDB(db)) {
+		if err = automigrateNovedad.AutomigrateNovedadTablasPrivadas(db); err != nil {
+			return err
+		} else {
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateNovedad.ObtenerVersionNovedadConfiguracion(), automigrateNovedad.Novedad, db)
+		}
+	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.ObtenerVersionLiquidacionDB(db)) {
+		if err = automigrateLiquidacion.AutomigrateLiquidacionTablasPrivadas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.Liquidacion, db)
+		}
+	}
+	return err
 }

@@ -37,3 +37,11 @@ func ConnectBD(tenant string) *gorm.DB {
 
 	return db
 }
+
+func ObtenerDB(tenant string) *gorm.DB {
+	return ConnectBD(tenant)
+}
+
+func CerrarDB(db *gorm.DB) {
+	db.DB().Close()
+}

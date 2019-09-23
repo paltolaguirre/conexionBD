@@ -14,7 +14,7 @@ func ConnectBD(tenant string) *gorm.DB {
 
 	configuracion := configuracion.GetInstance()
 
-	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb+" sslmode=disable")
+	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb+" sslmode="+configuracion.Ssldb)
 
 	if err != nil {
 		panic("failed to connect database")
@@ -36,4 +36,12 @@ func ConnectBD(tenant string) *gorm.DB {
 	}
 
 	return db
+}
+
+func ObtenerDB(tenant string) *gorm.DB {
+	return ConnectBD(tenant)
+}
+
+func CerrarDB(db *gorm.DB) {
+	db.DB().Close()
 }

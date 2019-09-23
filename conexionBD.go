@@ -11,10 +11,10 @@ import (
 func ConnectBD(tenant string) *gorm.DB {
 	var db *gorm.DB
 	var err error
-	
+
 	configuracion := configuracion.GetInstance()
 
-	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb)
+	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb+" sslmode=disable")
 
 	if err != nil {
 		panic("failed to connect database")

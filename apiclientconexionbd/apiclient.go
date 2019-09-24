@@ -11,11 +11,13 @@ import (
 )
 
 func AutomigrateTablaSecurity(db *gorm.DB) error {
+	var err error
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	err := automigrateAutenticacion.AutomigrateAutenticacionTablaSecurity(db)
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.ObtenerVersionAutenticacionDB(db)) {
-		if err == nil {
+		if err = automigrateAutenticacion.AutomigrateAutenticacionTablaSecurity(db); err != nil {
+			return err
+		} else {
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.Security, db)
 		}
 	}

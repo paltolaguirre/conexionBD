@@ -24,6 +24,7 @@ type Liquidacion struct {
 	Condicionpagoid                      *int                      `json:"condicionpagoid" sql:"type:int REFERENCES Liquidacioncondicionpago(ID)" gorm:"not null"`
 	Cuentabancoid                        *int                      `json:"cuentabancoid" gorm:"not null"`
 	//Cuentabanco                          Banco                   `json:"cuentabanco"`
+	Bancoaportejubilatorioid   *int                    `json:"bancoaportejubilatorioid" gorm:"not null;default:0"`
 	Fechaperiododepositado     time.Time               `json:"fechaperiododepositado"`
 	Fechaperiodoliquidacion    time.Time               `json:"fechaperiodoliquidacion"`
 	Importesremunerativos      []Importeremunerativo   `json:"importesremunerativos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`

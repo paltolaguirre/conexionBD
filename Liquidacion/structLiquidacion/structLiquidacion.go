@@ -23,16 +23,17 @@ type Liquidacion struct {
 	Condicionpago                        *Liquidacioncondicionpago `json:"condicionpago" gorm:"ForeignKey:Condicionpagoid;association_foreignkey:ID;association_autoupdate:false;not null"` /*1-Cuenta Corriente, 2-Contado*/
 	Condicionpagoid                      *int                      `json:"condicionpagoid" sql:"type:int REFERENCES Liquidacioncondicionpago(ID)" gorm:"not null"`
 	Cuentabancoid                        *int                      `json:"cuentabancoid" gorm:"not null"`
-	//Cuentabanco                          Banco                   `json:"cuentabanco"`
-	Bancoaportejubilatorioid   *int                    `json:"bancoaportejubilatorioid" gorm:"not null;default:0"`
-	Fechaperiododepositado     time.Time               `json:"fechaperiododepositado"`
-	Fechaperiodoliquidacion    time.Time               `json:"fechaperiodoliquidacion"`
-	Importesremunerativos      []Importeremunerativo   `json:"importesremunerativos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Importesnoremunerativos    []Importenoremunerativo `json:"importesnoremunerativos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Descuentos                 []Descuento             `json:"descuentos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Retenciones                []Retencion             `json:"retenciones" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Aportespatronales          []Aportepatronal        `json:"aportespatronales" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Estacontabilizada          bool                    `json:"estacontabilizada"`
-	Asientomanualtransaccionid int                     `json:"asientomanualtransaccionid"`
-	Asientomanualnombre        string                  `json:"asientomanualnombre"`
+	Cuentabanco                          *Banco                    `json:"cuentabanco"`
+	Bancoaportejubilatorioid             *int                      `json:"bancoaportejubilatorioid" gorm:"not null;default:0"`
+	Bancoaportejubilatorio               *Banco                    `json:"bancoaportejubilatorio"`
+	Fechaperiododepositado               time.Time                 `json:"fechaperiododepositado"`
+	Fechaperiodoliquidacion              time.Time                 `json:"fechaperiodoliquidacion"`
+	Importesremunerativos                []Importeremunerativo     `json:"importesremunerativos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
+	Importesnoremunerativos              []Importenoremunerativo   `json:"importesnoremunerativos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
+	Descuentos                           []Descuento               `json:"descuentos" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
+	Retenciones                          []Retencion               `json:"retenciones" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
+	Aportespatronales                    []Aportepatronal          `json:"aportespatronales" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
+	Estacontabilizada                    bool                      `json:"estacontabilizada"`
+	Asientomanualtransaccionid           int                       `json:"asientomanualtransaccionid"`
+	Asientomanualnombre                  string                    `json:"asientomanualnombre"`
 }

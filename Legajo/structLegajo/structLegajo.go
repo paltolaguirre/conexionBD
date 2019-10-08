@@ -47,4 +47,6 @@ type Legajo struct {
 	Centrodecosto           *Centrodecosto         `json:"centrodecosto"`
 	Centrodecostoid         *int                   `json:"centrodecostoid"`
 	Cbu                     string                 `json:"cbu"`
+	Estadocivil             *Estadocivil           `json:"estadocivil" gorm:"ForeignKey:Estadocivilid;association_foreignkey:ID;association_autoupdate:false;not null"`
+	Estadocivilid           *int                   `json:"estadocivilid" gorm:"not null;default:0"`
 }

@@ -10,6 +10,7 @@ type Concepto struct {
 	Descripcion    string  `json:"descripcion"`
 	Activo         int     `json:"activo"`
 	Tipo           string  `json:"tipo"`
-	CuentaContable *int    `json:"cuentacontable" gorm:"not null"`
+	CuentaContable *int    `json:"cuentacontableid" gorm:"not null"`
+	Cuentacontable *Cuenta `json:"cuentacontable"`
 	Esimprimible   bool    `json:"esimprimible"`
 }

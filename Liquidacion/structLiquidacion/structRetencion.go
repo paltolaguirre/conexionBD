@@ -9,7 +9,7 @@ type Retencion struct {
 	structGormModel.GormModel
 	Concepto        *structConcepto.Concepto `json:"concepto" gorm:"ForeignKey:Conceptoid;association_foreignkey:ID;association_autoupdate:false;not null"`
 	Conceptoid      *int                     `json:"conceptoid" gorm:"not null"`
-	Importeunitario *float32                 `json:"importeunitario" sql:"type:decimal(19,4);" gorm:"not null"`
+	Importeunitario *float64                 `json:"importeunitario" sql:"type:decimal(19,4);" gorm:"not null"`
 	Liquidacionid   int                      `json:"liquidacionid"`
 	/*
 		Cantidad        *int                      `json:"cantidad"`

@@ -5,11 +5,13 @@ import "github.com/xubiosueldos/conexionBD/structGormModel"
 //NO ESTOY USANDO EL MODEL DE GORM PORQUE SOLO USA UNSIGNED INTS ENTONCES NO PUEDO USAR ID NEGATIVOS
 type Concepto struct {
 	structGormModel.GormModel
-	Nombre         *string `json:"nombre" gorm:"not null"`
-	Codigo         string  `json:"codigo"`
-	Descripcion    string  `json:"descripcion"`
-	Activo         int     `json:"activo"`
-	Tipo           string  `json:"tipo"`
-	CuentaContable *int    `json:"cuentacontable" gorm:"not null"`
-	Esimprimible   bool    `json:"esimprimible"`
+	Nombre            *string `json:"nombre" gorm:"not null"`
+	Codigo            string  `json:"codigo"`
+	Descripcion       string  `json:"descripcion"`
+	Activo            int     `json:"activo"`
+	Tipo              string  `json:"tipo"`
+	CuentaContable    *int    `json:"cuentacontable" gorm:"not null"`
+	Esimprimible      bool    `json:"esimprimible"`
+	Tipoliquidacionid int     `json:"tipoliquidacionid"`
+	Esnovedad         bool    `json:"esnovedad"`
 }

@@ -1,6 +1,6 @@
-package structLegajo
+package structConcepto
 
-type Centrodecosto struct {
+type Cuenta struct {
 	ID          int    `json:"ID"`
 	Nombre      string `json:"nombre"`
 	Codigo      string `json:"codigo"`

@@ -1,0 +1,5 @@
+UPDATE concepto SET tipoliquidacionid = -1 ,esnovedad = false WHERE id IN (-1,-2,-3,-4,-5,-6)
+UPDATE concepto SET tipoliquidacionid = -2 ,esnovedad = false WHERE id IN (-7,-8,-9,-10,-11,-12,-13,-14)
+UPDATE concepto SET tipoliquidacionid = -3 ,esnovedad = false WHERE id IN (-15,-16,-17)
+UPDATE concepto SET tipoliquidacionid = -4 ,esnovedad = false WHERE id IN (-18,-19,-20)
+UPDATE concepto SET tipoliquidacionid = -5 ,esnovedad = false WHERE id IN (-21,-22,-23,-24,-25,-26,-27,-28)

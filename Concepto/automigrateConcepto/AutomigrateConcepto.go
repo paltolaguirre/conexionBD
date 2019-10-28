@@ -13,7 +13,7 @@ import (
 func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structConcepto.Concepto{}, &structConcepto.Tipoliquidacion{}).Error
+	err := db.AutoMigrate(&structConcepto.Concepto{}).Error
 	return err
 }
 

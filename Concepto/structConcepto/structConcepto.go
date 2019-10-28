@@ -14,6 +14,6 @@ type Concepto struct {
 	Cuentacontable    *Cuenta          `json:"cuentacontable"`
 	Esimprimible      bool             `json:"esimprimible"`
 	Tipoliquidacion   *Tipoliquidacion `json:"tipoliquidacion" gorm:"ForeignKey:Tipoliquidacionid;association_foreignkey:ID;association_autoupdate:false;not null"`
-	Tipoliquidacionid *int             `json:"tipoliquidacionid"`
-	Esnovedad         bool             `json:"esnovedad"`
+	Tipoliquidacionid *int             `json:"tipoliquidacionid" gorm:"not null;default:0"`
+	Esnovedad         bool             `json:"esnovedad" gorm:"default:false"`
 }

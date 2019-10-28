@@ -13,13 +13,19 @@ import (
 func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structConcepto.Concepto{}).Error
+	err := db.AutoMigrate(&structConcepto.Concepto{}, &structConcepto.Tipoliquidacion{}).Error
+	if err == nil {
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipoliquidacionid", "tipoliquidacion(id)", "CASCADE", "CASCADE")
+	}
 	return err
 }
 
 func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structConcepto.Concepto{}).Error
+	err := db.AutoMigrate(&structConcepto.Concepto{}, &structConcepto.Tipoliquidacion{}).Error
+	if err == nil {
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipoliquidacionid", "tipoliquidacion(id)", "CASCADE", "CASCADE")
+	}
 	return err
 }
 

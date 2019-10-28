@@ -6,4 +6,4 @@ INSERT INTO tipoliquidacion(created_at, nombre, codigo, descripcion, activo)
 (current_timestamp,'Retención','RETENCION','',1),
 (current_timestamp,'Aporte Patronal','APORTE_PATRONAL','',1);
 
-UPDATE public.estadocivil SET id = -id;
+UPDATE public.tipoliquidacion SET id = -id;

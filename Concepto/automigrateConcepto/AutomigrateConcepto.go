@@ -20,6 +20,21 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structConcepto.Concepto{}, &structConcepto.Tipoliquidacion{}).Error
+	if err == nil {
+		var tipoLiquidacion structConcepto.Tipoliquidacion
+		db.Raw("SELECT * FROM TIPOLIQUIDACION").Scan(&tipoLiquidacion)
+		if tipoLiquidacion.ID == 0 {
+			db.Exec("INSERT INTO TIPOLIQUIDACION(created_at, nombre, codigo, descripcion, activo) VALUES (current_timestamp,'Importe Remunerativo','IMPORTE_REMUNERATIVO','',1),(current_timestamp,'Importe No Remunerativo','IMPORTE_NO_REMUNERATIVO','',1),(current_timestamp,'Descuento','DESCUENTO','',1),(current_timestamp,'Retención','RETENCION','',1),(current_timestamp,'Aporte Patronal','APORTE_PATRONAL','',1);")
+			db.Exec("UPDATE public.tipoliquidacion SET id = -id;")
+		}
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -1 ,esnovedad = false WHERE id IN (-1,-2,-3,-4)")
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -1 ,esnovedad = true WHERE id IN (-5,-6)")
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -2 ,esnovedad = false WHERE id IN (-7,-8,-9,-10,-11,-12,-13,-14)")
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -3 ,esnovedad = true WHERE id IN (-15,-16,-17)")
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -4 ,esnovedad = false WHERE id IN (-18,-19,-20)")
+		db.Exec("UPDATE concepto SET tipoliquidacionid = -5 ,esnovedad = false WHERE id IN (-21,-22,-23,-24,-25,-26,-27,-28)")
+
+	}
 	return err
 }
 

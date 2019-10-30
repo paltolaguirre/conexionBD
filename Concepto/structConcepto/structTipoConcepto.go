@@ -4,7 +4,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/structGormModel"
 )
 
-type Tipoliquidacion struct {
+type Tipoconcepto struct {
 	structGormModel.GormModel
 	Nombre      string `json:"nombre"`
 	Codigo      string `json:"codigo"`

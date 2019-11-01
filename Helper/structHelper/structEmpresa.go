@@ -8,10 +8,10 @@ type Empresa struct {
 	Domicilio              string `json:"domicilio"`
 	Localidad              string `json:"localidad"`
 	Cuit                   string `json:"cuit"`
-	Tipodeempresa          int    `json:"tipodeempresa"`
-	Actividad              int    `json:"actividad"`
+	Actividad              string `json:"actividad"`
 	Actividadnombre        string `json:"actividadnombre"`
-	Zona                   int    `json:"zona"`
+	Tipodeempresa          int    `json:"tipodeempresa"`
+	Zona                   string `json:"zona"`
 	Zonanombre             string `json:"zonanombre"`
 	Obrasocial             int    `json:"obrasocial"`
 	Artcontratada          int    `json:"artcontratada"`

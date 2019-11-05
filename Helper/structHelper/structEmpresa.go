@@ -17,4 +17,5 @@ type Empresa struct {
 	Artcontratada          int    `json:"artcontratada"`
 	Domiciliodeexplotacion string `json:"domiciliodeexplotacion"`
 	Reducevalor            int    `json:"reducevalor"`
+	Logo                   string `json:"logo"`
 }

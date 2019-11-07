@@ -17,7 +17,10 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structLiquidacion.Aportepatronal{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 
-		//unificarDatosEnLaTablaLiquidacionItem(db)
+		if ObtenerVersionLiquidacionConfiguracion() < 4 {
+			err = unificarDatosEnLaTablaLiquidacionItem(db)
+		}
+
 	}
 	return err
 }
@@ -28,11 +31,51 @@ func AutomigrateLiquidacionTablasPublicas(db *gorm.DB) error {
 	return err
 }
 
-/*func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) {
-	//Se podria agregar otra columna en cada una de las tablas a unificar para saber si el registro fue o no colocado en la tabla liquidacionitem
-	db.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)")
-	db.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importenoremunerativo)")
-	db.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM descuento)")
-	db.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM retencion)")
-	db.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM aportepatronal)")
-}*/
+func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
+	//abro una transacción para que si hay un error no persista en la DB
+	var err error
+	tx := db.Begin()
+	if err = insertTablaLiquidacionTipo(tx); err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return err
+}
+
+func insertTablaLiquidacionTipo(tx *gorm.DB) error {
+	var err error
+
+	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)").Error; err != nil {
+		return err
+	} else {
+		tx.Exec("DELETE FROM mporteremunerativo")
+	}
+
+	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importenoremunerativo)").Error; err != nil {
+		return err
+	} else {
+		tx.Exec("DELETE FROM importenoremunerativo")
+
+	}
+
+	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM descuento)").Error; err != nil {
+		return err
+	} else {
+		tx.Exec("DELETE FROM descuento")
+	}
+
+	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM retencion)").Error; err != nil {
+		return err
+	} else {
+		tx.Exec("DELETE FROM retencion")
+	}
+
+	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM aportepatronal)").Error; err != nil {
+		return err
+	} else {
+		tx.Exec("DELETE FROM aportepatronal")
+	}
+
+	return err
+}

@@ -17,7 +17,7 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structLiquidacion.Aportepatronal{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 
-		if ObtenerVersionLiquidacionConfiguracion() < 4 {
+		if ObtenerVersionLiquidacionDB(db) < 4 {
 			err = unificarDatosEnLaTablaLiquidacionItem(db)
 		}
 
@@ -49,7 +49,7 @@ func insertTablaLiquidacionTipo(tx *gorm.DB) error {
 	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)").Error; err != nil {
 		return err
 	} else {
-		tx.Exec("DELETE FROM mporteremunerativo")
+		tx.Exec("DELETE FROM importeremunerativo")
 	}
 
 	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importenoremunerativo)").Error; err != nil {

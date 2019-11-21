@@ -28,9 +28,9 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("UPDATE public.tipodecalculo SET id = -id;")
 		}
 
-		db.Raw("UPDATE CONCEPTO SET porcentaje = 11.0000, tipodecalculoid = -3 WHERE ID = -18")
-		db.Raw("UPDATE CONCEPTO SET porcentaje = 3.0000, tipodecalculoid = -3 WHERE ID = -19")
-		db.Raw("UPDATE CONCEPTO SET porcentaje = 3.0000, tipodecalculoid = -3 WHERE ID = -20")
+		db.Exec("UPDATE CONCEPTO SET porcentaje = 11.0000, tipodecalculoid = -3 WHERE ID = -18")
+		db.Exec("UPDATE CONCEPTO SET porcentaje = 3.0000, tipodecalculoid = -3 WHERE ID = -19")
+		db.Exec("UPDATE CONCEPTO SET porcentaje = 3.0000, tipodecalculoid = -3 WHERE ID = -20")
 
 	}
 	return err

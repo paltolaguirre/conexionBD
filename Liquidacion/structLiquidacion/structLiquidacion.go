@@ -37,4 +37,5 @@ type Liquidacion struct {
 	Estacontabilizada                    bool                      `json:"estacontabilizada"`
 	Asientomanualtransaccionid           int                       `json:"asientomanualtransaccionid"`
 	Asientomanualnombre                  string                    `json:"asientomanualnombre"`
+	Liquidacionitems                     []Liquidacionitem         `json:"liquidacionitems" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
 }

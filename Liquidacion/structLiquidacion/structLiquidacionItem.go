@@ -12,7 +12,7 @@ type Liquidacionitem struct {
 	Importeunitario *float64                 `json:"importeunitario" sql:"type:decimal(19,4);" gorm:"not null"`
 	Liquidacionid   int                      `json:"liquidacionid"`
 	/*
-		Cantidad        *int                      `json:"cantidad"`
+		 Cantidad        *int                      `json:"cantidad"`
 		Porcentaje      *int                      `json:"porcentaje"`
 		Sobreconceptos  []structConcepto.Concepto `json:"sobreconceptos" gorm:"ForeignKey:Sobreconceptoid;association_foreignkey:ID;association_autoupdate:false"`
 		Sobreconceptoid *int                      `json:"sobreconceptoid"`

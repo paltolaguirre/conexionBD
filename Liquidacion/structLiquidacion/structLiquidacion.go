@@ -7,6 +7,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/structGormModel"
 )
 
+//
 type Liquidacion struct {
 	structGormModel.GormModel
 	Nombre                               string                    `json:"nombre"`

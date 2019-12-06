@@ -8,7 +8,7 @@ import (
 func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 
 	// para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structLiquidacion.Liquidacionitem{}).Error
+	err := db.AutoMigrate(&structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
 	if err == nil {
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 
@@ -40,37 +40,42 @@ func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
 
 func insertTablaLiquidacionTipo(tx *gorm.DB) error {
 	var err error
+	//Necesito comparar porque las empresas nuevas no tienen las cinco tablas (importeremunerativo,descuento,retencion...)
+	if err = tx.Exec("SELECT * FROM importeremunerativo limit 1").Error; err.Error() != "pq: relation \"importeremunerativo\" does not exist" {
 
-	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)").Error; err != nil {
-		return err
+		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)").Error; err != nil {
+			return err
+		} else {
+			tx.Exec("DELETE FROM importeremunerativo")
+		}
+
+		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importenoremunerativo)").Error; err != nil {
+			return err
+		} else {
+			tx.Exec("DELETE FROM importenoremunerativo")
+
+		}
+
+		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM descuento)").Error; err != nil {
+			return err
+		} else {
+			tx.Exec("DELETE FROM descuento")
+		}
+
+		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM retencion)").Error; err != nil {
+			return err
+		} else {
+			tx.Exec("DELETE FROM retencion")
+		}
+
+		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM aportepatronal)").Error; err != nil {
+			return err
+		} else {
+			tx.Exec("DELETE FROM aportepatronal")
+		}
 	} else {
-		tx.Exec("DELETE FROM importeremunerativo")
+		//Cuando el refactor no se hace hay que devolver nil para que se cree el registro de liquidacion en la tabla versiondbmicroservicio
+		err = nil
 	}
-
-	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importenoremunerativo)").Error; err != nil {
-		return err
-	} else {
-		tx.Exec("DELETE FROM importenoremunerativo")
-
-	}
-
-	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM descuento)").Error; err != nil {
-		return err
-	} else {
-		tx.Exec("DELETE FROM descuento")
-	}
-
-	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM retencion)").Error; err != nil {
-		return err
-	} else {
-		tx.Exec("DELETE FROM retencion")
-	}
-
-	if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM aportepatronal)").Error; err != nil {
-		return err
-	} else {
-		tx.Exec("DELETE FROM aportepatronal")
-	}
-
 	return err
 }

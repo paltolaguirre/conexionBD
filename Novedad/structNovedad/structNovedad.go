@@ -15,7 +15,7 @@ type Novedad struct {
 	Descripcion string                   `json:"descripcion"`
 	Activo      int                      `json:"activo"`
 	Importe     *float32                 `json:"importe" sql:"type:decimal(19,4);" gorm:"not null"`
-	Cantidad    int                      `json:"cantidad"`
+	Cantidad    float64                  `json:"cantidad"`
 	Fecha       *time.Time               `json:"fecha" gorm:"not null"`
 	Legajo      *structLegajo.Legajo     `json:"legajo" gorm:"ForeignKey:Legajoid;association_foreignkey:ID;association_autoupdate:false;not null;PRELOAD:false"`
 	Legajoid    *int                     `json:"legajoid" sql:"type:int REFERENCES Legajo(ID)" gorm:"not null"`

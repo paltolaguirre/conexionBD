@@ -11,7 +11,7 @@ type Liquidacionitem struct {
 	Conceptoid      *int                     `json:"conceptoid" gorm:"not null"`
 	Importeunitario *float64                 `json:"importeunitario" sql:"type:decimal(19,4);" gorm:"not null"`
 	Liquidacionid   int                      `json:"liquidacionid"`
-	Cantidad        float64                  `json:"cantidad"`
+	Cantidad        float64                  `json:"cantidad" sql:"type:decimal(19,4);"`
 	/*
 		 Cantidad        *int                      `json:"cantidad"`
 		Porcentaje      *int                      `json:"porcentaje"`

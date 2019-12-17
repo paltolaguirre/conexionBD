@@ -21,6 +21,6 @@ type Concepto struct {
 	Tipodecalculoid         *int                   `json:"tipodecalculoid"`
 	Prorateo                bool                   `json:"prorateo"`
 	Basesac                 bool                   `json:"basesac"`
-	Tipoimpuestoganancias   *Tipoimpuestoganancias `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciaid;association_foreignkey:ID;association_autoupdate:false;not null"`
+	Tipoimpuestoganancias   *Tipoimpuestoganancias `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciasid;association_foreignkey:ID;association_autoupdate:false;not null"`
 	Tipoimpuestogananciasid *int                   `json:"tipoimpuestogananciasid"`
 }

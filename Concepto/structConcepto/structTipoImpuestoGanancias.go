@@ -2,7 +2,7 @@ package structConcepto
 
 import "github.com/xubiosueldos/conexionBD/structGormModel"
 
-type Tipoimpuestoganancia struct {
+type Tipoimpuestoganancias struct {
 	structGormModel.GormModel
 	Nombre                      string `json:"nombre"`
 	Codigo                      string `json:"codigo"`

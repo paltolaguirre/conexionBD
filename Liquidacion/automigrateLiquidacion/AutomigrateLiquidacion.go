@@ -41,7 +41,7 @@ func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
 func insertTablaLiquidacionTipo(tx *gorm.DB) error {
 	var err error
 	//Necesito comparar porque las empresas nuevas no tienen las cinco tablas (importeremunerativo,descuento,retencion...)
-	if err = tx.Exec("SELECT * FROM importeremunerativo limit 1").Error; err.Error() != "pq: relation \"importeremunerativo\" does not exist" {
+	if err = tx.Exec("SELECT * FROM importeremunerativo limit 1").Error; err == nil {
 
 		if err = tx.Exec("INSERT INTO liquidacionitem(created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid) (SELECT created_at,updated_at,deleted_at,conceptoid,importeunitario,liquidacionid FROM importeremunerativo)").Error; err != nil {
 			return err
@@ -74,8 +74,10 @@ func insertTablaLiquidacionTipo(tx *gorm.DB) error {
 			tx.Exec("DELETE FROM aportepatronal")
 		}
 	} else {
-		//Cuando el refactor no se hace hay que devolver nil para que se cree el registro de liquidacion en la tabla versiondbmicroservicio
-		err = nil
+		if err.Error() == "pq: relation \"importeremunerativo\" does not exist" {
+			//Cuando el refactor no se hace hay que devolver nil para que se cree el registro de liquidacion en la tabla versiondbmicroservicio
+			err = nil
+		}
 	}
 	return err
 }

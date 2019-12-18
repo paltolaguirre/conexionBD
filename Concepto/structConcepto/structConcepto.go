@@ -19,7 +19,7 @@ type Concepto struct {
 	Porcentaje              *float64               `json:"porcentaje" sql:"type:decimal(19,4);"`
 	Tipodecalculo           *Tipodecalculo         `json:"tipodecalculo" gorm:"ForeignKey:Tipodecalculoid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipodecalculoid         *int                   `json:"tipodecalculoid"`
-	Prorateo                bool                   `json:"prorateo"`
+	Prorrateo               bool                   `json:"prorrateo"`
 	Basesac                 bool                   `json:"basesac"`
 	Tipoimpuestoganancias   *Tipoimpuestoganancias `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciasid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipoimpuestogananciasid *int                   `json:"tipoimpuestogananciasid"`

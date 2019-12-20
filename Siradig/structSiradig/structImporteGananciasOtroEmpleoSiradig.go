@@ -6,8 +6,9 @@ import (
 	"github.com/xubiosueldos/conexionBD/structGormModel"
 )
 
-type Importegananciasotrosempleossiradig struct {
+type Importegananciasotroempleosiradig struct {
 	structGormModel.GormModel
+	Siradigid                           *int
 	Mes                                 *time.Time `json:"mes"`
 	Importegananciasbrutas              *float64   `json:"importegananciasbrutas"`
 	Aporteseguridadsocial               *float64   `json:"aporteseguridadsocial"`

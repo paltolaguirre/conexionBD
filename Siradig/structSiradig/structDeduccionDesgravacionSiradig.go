@@ -2,6 +2,6 @@ package structSiradig
 
 import "github.com/xubiosueldos/conexionBD/structGormModel"
 
-type Deducciondesgravacion struct {
+type Deducciondesgravacionsiradig struct {
 	structGormModel.GormModel
 }

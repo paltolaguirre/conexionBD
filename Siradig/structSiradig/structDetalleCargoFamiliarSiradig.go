@@ -19,8 +19,8 @@ type Detallecargofamiliarsiradig struct {
 	Estaacargo          bool                 `json:"estaacargo"`
 	Residenteenelpais   bool                 `json:"residenteenelpais"`
 	Obtuvoingresos      bool                 `json:"obtuvoingresos"`
-	Montoanual          *float64             `json:"montoanual"`
+	Montoanual          *float64             `json:"montoanual"  sql:"type:decimal(19,4);"`
 	Mesdesde            *time.Time           `json:"mesdesde"`
 	Meshasta            *time.Time           `json:"meshasta"`
-	Porcentaje          *float64             `json:"porcentaje"`
+	Porcentaje          *float64             `json:"porcentaje"  sql:"type:decimal(19,4);"`
 }

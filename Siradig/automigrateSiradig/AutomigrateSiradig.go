@@ -8,7 +8,8 @@ import (
 func AutomigrateSiradigTablasPrivadas(db *gorm.DB) error {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structSiradig.Detallecargofamiliarsiradig{}, &structSiradig.Importegananciasotroempleosiradig{}, &structSiradig.Deducciondesgravacionsiradig{}, &structSiradig.Retencionpercepcionsiradig{}, &structSiradig.Beneficiosiradig{}, &structSiradig.Ajustesiradig{}).Error
+	err := db.AutoMigrate(&structSiradig.Detallecargofamiliarsiradig{}, &structSiradig.Importegananciasotroempleosiradig{}, &structSiradig.Deducciondesgravacionsiradig{}, &structSiradig.Retencionpercepcionsiradig{}, &structSiradig.Beneficiselect * from siradigtipooperacion
+osiradig{}, &structSiradig.Ajustesiradig{}).Error
 	if err == nil {
 		db.Model(&structSiradig.Detallecargofamiliarsiradig{}).AddForeignKey("siradigid", "siradig(id)", "CASCADE", "CASCADE")
 		db.Model(&structSiradig.Detallecargofamiliarsiradig{}).AddForeignKey("siradigtipogrillaid", "siradigtipogrilla(id)", "CASCADE", "CASCADE")

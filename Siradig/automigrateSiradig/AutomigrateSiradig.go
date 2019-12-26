@@ -34,7 +34,7 @@ func AutomigrateSiradigTablasPrivadas(db *gorm.DB) error {
 
 func AutomigrateSiradigTablasPublicas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structSiradig.Siradigotipoimpuesto{}, &structSiradig.Siradigtipooperacion{}, &structSiradig.Siradigtipogrilla{}).Error
+	err := db.AutoMigrate(&structSiradig.Siradigtipoimpuesto{}, &structSiradig.Siradigtipooperacion{}, &structSiradig.Siradigtipogrilla{}).Error
 	if err == nil {
 		db.Exec("INSERT INTO SIRADIGTIPOGRILLA(created_at, nombre, codigo, descripcion, activo) VALUES(current_timestamp,'Hijo Siradig','HIJO_SIRADIG','',1)")
 		db.Exec("INSERT INTO SIRADIGTIPOGRILLA(created_at, nombre, codigo, descripcion, activo) VALUES (current_timestamp,'Conyuge Siradig','CONYUGE_SIRADIG','',1)")

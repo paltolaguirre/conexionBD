@@ -4,7 +4,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/structGormModel"
 )
 
-type Siradigotipoimpuesto struct {
+type Siradigtipoimpuesto struct {
 	structGormModel.GormModel
 	Nombre      string `json:"nombre"`
 	Codigo      string `json:"codigo"`

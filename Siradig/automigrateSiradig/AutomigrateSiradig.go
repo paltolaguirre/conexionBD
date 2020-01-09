@@ -14,7 +14,6 @@ func AutomigrateSiradigTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structSiradig.Detallecargofamiliarsiradig{}).AddForeignKey("siradigtipogrillaid", "siradigtipogrilla(id)", "CASCADE", "CASCADE")
 
 		db.Model(&structSiradig.Importegananciasotroempleosiradig{}).AddForeignKey("siradigid", "siradig(id)", "CASCADE", "CASCADE")
-		db.Model(&structSiradig.Importegananciasotroempleosiradig{}).AddForeignKey("siradigtipogrillaid", "siradigtipogrilla(id)", "CASCADE", "CASCADE")
 
 		db.Model(&structSiradig.Deducciondesgravacionsiradig{}).AddForeignKey("siradigid", "siradig(id)", "CASCADE", "CASCADE")
 		db.Model(&structSiradig.Deducciondesgravacionsiradig{}).AddForeignKey("siradigtipogrillaid", "siradigtipogrilla(id)", "CASCADE", "CASCADE")

@@ -11,7 +11,7 @@ type Ajustesiradig struct {
 	Siradigtipogrilla            Siradigtipogrilla `json:"siradigtipogrilla" gorm:"ForeignKey:Siradigtipogrillaid;association_foreignkey:ID;association_autoupdate:false"`
 	Siradigtipogrillaid          *int              `json:"siradigtipogrillaid" sql:"type:int REFERENCES Siradigtipogrilla(ID)"`
 	Siradigid                    int               `json:"siradigid"`
-	Cuit                         string            `json:"cuir"`
+	Cuit                         string            `json:"cuit"`
 	Razonsocial                  string            `json:"razonsocial"`
 	Año                          *time.Time        `json:"año"`
 	Montoretroactivocobrado      *float64          `json:"montoretroactivocobrado"  sql:"type:decimal(19,4);"`

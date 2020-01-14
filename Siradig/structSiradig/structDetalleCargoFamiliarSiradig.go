@@ -12,7 +12,7 @@ type Detallecargofamiliarsiradig struct {
 	Siradigtipogrilla   Siradigtipogrilla    `json:"siradigtipogrilla" gorm:"ForeignKey:Siradigtipogrillaid;association_foreignkey:ID;association_autoupdate:false"`
 	Siradigtipogrillaid *int                 `json:"siradigtipogrillaid" sql:"type:int REFERENCES Siradigtipogrilla(ID)"`
 	Siradigid           int                  `json:"siradigid"`
-	Hijo                structLegajo.Hijo    `json:"hijos" gorm:"ForeignKey:Hijoid;association_foreignkey:ID;association_autoupdate:false"`
+	Hijo                structLegajo.Hijo    `json:"hijo" gorm:"ForeignKey:Hijoid;association_foreignkey:ID;association_autoupdate:false"`
 	Hijoid              *int                 `json:"hijoid" sql:"type:int REFERENCES Hijo(ID)"`
 	Conyuge             structLegajo.Conyuge `json:"conyuge" gorm:"ForeignKey:Conyugeid;association_foreignkey:ID;association_autoupdate:false"`
 	Conyugeid           *int                 `json:"conyugeid" sql:"type:int REFERENCES Conyuge(ID)"`

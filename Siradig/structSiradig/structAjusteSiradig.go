@@ -13,7 +13,7 @@ type Ajustesiradig struct {
 	Siradigid                    int               `json:"siradigid"`
 	Cuit                         string            `json:"cuit"`
 	Razonsocial                  string            `json:"razonsocial"`
-	Año                          *time.Time        `json:"año"`
+	Anio                         *time.Time        `json:"anio"`
 	Montoretroactivocobrado      *float64          `json:"montoretroactivocobrado"  sql:"type:decimal(19,4);"`
 	Cumplesegundoparrafoley24467 bool              `json:"cumplesegundoparrafoley24467"`
 	Montoreintegrar              *float64          `json:"montoreintegrar"  sql:"type:decimal(19,4);"`

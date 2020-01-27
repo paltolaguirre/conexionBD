@@ -17,8 +17,6 @@ BEGIN
 				ALTER TABLE escalaimpuestoaplicable_id_seq
 				  OWNER TO postgres;
 				GRANT ALL ON SEQUENCE escalaimpuestoaplicable_id_seq TO postgres;
-				GRANT SELECT, USAGE ON SEQUENCE escalaimpuestoaplicable_id_seq TO rol_super;
-				GRANT SELECT, USAGE ON SEQUENCE escalaimpuestoaplicable_id_seq TO rol_common;
 		   ELSIF _kind = 'S' THEN  -- sequence exists
 		      -- nada
 		   ELSE                    -- object name exists for different kind

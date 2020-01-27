@@ -17,14 +17,11 @@ BEGIN
         ALTER TABLE deduccionespersonales_id_seq
             OWNER TO postgres;
         GRANT ALL ON SEQUENCE deduccionespersonales_id_seq TO postgres;
-        GRANT SELECT, USAGE ON SEQUENCE deduccionespersonales_id_seq TO rol_super;
-        GRANT SELECT, USAGE ON SEQUENCE deduccionespersonales_id_seq TO rol_common;
     ELSIF _kind = 'S' THEN  -- sequence exists
         -- nada
     ELSE                    -- object name exists for different kind
         -- nada
     END IF;
-
 
 CREATE TABLE deduccionespersonales(
   id INTEGER NOT NULL DEFAULT nextval('deduccionespersonales_id_seq'::regclass),
@@ -52,7 +49,7 @@ $$;
 
 
 
-$$
+DO $$
 BEGIN
     INSERT INTO deduccionespersonales(created_at,activo,valorfijoconyuge,valorfijohijo,valorfijomni,valorfijoddei,anio)
     VALUES

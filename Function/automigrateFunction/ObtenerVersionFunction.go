@@ -1,4 +1,4 @@
-package automigrateFormula
+package automigrateFunction
 
 import (
 	"github.com/jinzhu/gorm"
@@ -7,14 +7,14 @@ import (
 )
 
 const (
-	Formula = "formula"
+	Function = "formula"
 )
 
-func ObtenerVersionFormulaDB(db *gorm.DB) int {
-	return versiondbmicroservicio.UltimaVersion(Formula, db)
+func ObtenerVersionFunctionDB(db *gorm.DB) int {
+	return versiondbmicroservicio.UltimaVersion(Function, db)
 }
 
-func ObtenerVersionFormulaConfiguracion() int {
+func ObtenerVersionFunctionConfiguracion() int {
 	configuracion := configuracion.GetInstance()
 
 	return configuracion.Versionformula

@@ -2,6 +2,8 @@ package structFunction
 
 import (
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Function struct {
@@ -17,4 +19,9 @@ type Function struct {
 	Result      string     `json:"result"`
 	Value       *Value     `json:"value" gorm:"ForeignKey:Valueid;association_foreignkey:ID;association_autoupdate:false;not null"`
 	Valueid     *int       `json:"valueid" gorm:"not null"`
+}
+
+// AfterDelete hook defined for cascade delete
+func (function *Function) AfterDelete(tx *gorm.DB) error {
+	return tx.Model(&Value{}).Where("id = ?", function.Valueid).Unscoped().Delete(&Value{}).Error
 }

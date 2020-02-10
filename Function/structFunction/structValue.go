@@ -9,7 +9,7 @@ type Value struct {
 	Name          string  `json:"name"`
 	Valuenumber   int64   `json:"valuenumber"`
 	Valuestring   string  `json:"valuestring"`
-	Valueinvoke   *Invoke `json:"invoke" gorm:"ForeignKey:Valueinvokeid;association_foreignkey:ID;association_autoupdate:false;not null"`
-	Valueinvokeid int     `json:"invokeid"`
+	Valueinvoke   *Invoke `json:"valueinvoke" gorm:"ForeignKey:Valueinvokeid;association_foreignkey:ID;association_autoupdate:false;not null"`
+	Valueinvokeid int     `json:"valueinvokeid"`
 	Arginvokeid   int     `json:"arginvokeid"`
 }

@@ -8,7 +8,7 @@ import (
 func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 
 	// para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
+	err := db.AutoMigrate(&structLiquidacion.Acumulador{}, &structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
 	if err == nil {
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 

@@ -4,9 +4,11 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Autenticacion/automigrateAutenticacion"
 	"github.com/xubiosueldos/conexionBD/Concepto/automigrateConcepto"
+	"github.com/xubiosueldos/conexionBD/Function/automigrateFunction"
 	"github.com/xubiosueldos/conexionBD/Legajo/automigrateLegajo"
 	"github.com/xubiosueldos/conexionBD/Liquidacion/automigrateLiquidacion"
 	"github.com/xubiosueldos/conexionBD/Novedad/automigrateNovedad"
+	"github.com/xubiosueldos/conexionBD/Siradig/automigrateSiradig"
 	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
 
@@ -57,6 +59,16 @@ func AutomigrateTablasPublicas(db *gorm.DB) error {
 		}
 	}
 
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.ObtenerVersionSiradigDB(db)) {
+
+		if err = automigrateSiradig.AutomigrateSiradigTablasPublicas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
+		}
+	}
+
 	return err
 }
 
@@ -100,5 +112,24 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.Liquidacion, db)
 		}
 	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.ObtenerVersionSiradigDB(db)) {
+		if err = automigrateSiradig.AutomigrateSiradigTablasPrivadas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
+		}
+	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
+		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
+		}
+	}
+
 	return err
 }

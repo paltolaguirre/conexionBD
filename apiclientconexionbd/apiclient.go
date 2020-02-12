@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Autenticacion/automigrateAutenticacion"
 	"github.com/xubiosueldos/conexionBD/Concepto/automigrateConcepto"
+	"github.com/xubiosueldos/conexionBD/Function/automigrateFunction"
 	"github.com/xubiosueldos/conexionBD/Legajo/automigrateLegajo"
 	"github.com/xubiosueldos/conexionBD/Liquidacion/automigrateLiquidacion"
 	"github.com/xubiosueldos/conexionBD/Novedad/automigrateNovedad"
@@ -120,5 +121,15 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
 		}
 	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
+		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
+		}
+	}
+
 	return err
 }

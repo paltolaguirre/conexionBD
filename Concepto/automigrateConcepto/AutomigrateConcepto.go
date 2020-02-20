@@ -28,6 +28,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -18")
 		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -19")
 		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -20")
+		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -31")
 	}
 	return err
 }

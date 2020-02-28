@@ -24,6 +24,9 @@ func ConnectBD(tenant string) *gorm.DB {
 	//db.DB().SetMaxOpenConns()
 	//Crea el schema si no existe
 	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
+	db.Exec("GRANT USAGE ON SCHEMA " + tenant + " TO read_only")
+	db.Exec("ALTER DEFAULT PRIVILEGES FOR USER postgres	IN SCHEMA " + tenant +" GRANT SELECT ON TABLES TO read_only")
+
 
 	db.SingularTable(true)
 

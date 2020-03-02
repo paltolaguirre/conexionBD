@@ -23,4 +23,5 @@ type Concepto struct {
 	Basesac                 bool                   `json:"basesac"`
 	Tipoimpuestoganancias   *Tipoimpuestoganancias `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciasid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipoimpuestogananciasid *int                   `json:"tipoimpuestogananciasid"`
+	Eseditable              bool                   `json:"eseditable" gorm:"not null; default:true"`
 }

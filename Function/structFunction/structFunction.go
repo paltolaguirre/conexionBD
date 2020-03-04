@@ -18,7 +18,7 @@ type Function struct {
 	Scope       string     `json:"scope"`
 	Result      string     `json:"result"`
 	Value       *Value     `json:"value" gorm:"ForeignKey:Valueid;association_foreignkey:ID;association_autoupdate:false;not null"`
-	Valueid     *int       `json:"valueid" gorm:"not null"`
+	Valueid     *int       `json:"valueid" sql:"type:int REFERENCES Value(ID)" gorm:"not null"`
 }
 
 // AfterDelete hook defined for cascade delete

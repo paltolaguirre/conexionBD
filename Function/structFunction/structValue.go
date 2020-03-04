@@ -10,8 +10,8 @@ type Value struct {
 	Valuenumber   float64 `json:"valuenumber" sql:"type:decimal(19,4);"`
 	Valuestring   string  `json:"valuestring"`
 	Valueboolean  bool    `json:"Valueboolean"`
-	Valueinvoke   *Invoke `json:"valueinvoke" gorm:"ForeignKey:Valueinvokeid;association_foreignkey:ID;association_autoupdate:false;"`
-	Valueinvokeid int     `json:"valueinvokeid" sql:"type:int REFERENCES Invoke(ID)"`
+	Valueinvoke   *Invoke `json:"valueinvoke" gorm:"ForeignKey:Valueinvokeid;"`
+	Valueinvokeid *int    `json:"valueinvokeid"`
 	Arginvokeid   int     `json:"arginvokeid"`
 	// Valueobject   interface{} `json:"valueobject" gorm:"type:json"`
 }

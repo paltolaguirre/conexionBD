@@ -11,6 +11,7 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 	err := db.AutoMigrate(&structLiquidacion.Acumulador{}, &structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
 	if err == nil {
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
+		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("conceptoid", "concepto(id)", "RESTRICT", "RESTRICT")
 		db.Model(&structLiquidacion.Acumulador{}).AddForeignKey("liquidacionitemid", "liquidacionitem(id)", "CASCADE", "CASCADE")
 
 		if ObtenerVersionLiquidacionDB(db) < 4 {

@@ -29,6 +29,6 @@ type Concepto struct {
 	Eseditable              bool                     `json:"eseditable" gorm:"not null; default:true"`
 	Tipocalculoautomatico   *TipoCalculoAutomatico   `json:"tipocalculoautomatico" gorm:"ForeignKey:Tipocalculoautomaticoid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipocalculoautomaticoid *int                     `json:"tipocalculoautomaticoid"`
-	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulaid;association_foreignkey:ID;association_autoupdate:false"`
-	Formulaid               *int                     `json:"formulaid"`
+	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulanombre;association_foreignkey:Name;association_autoupdate:false"`
+	Formulanombre           *string                  `json:"formulanombre"`
 }

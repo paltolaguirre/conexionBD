@@ -14,8 +14,14 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("conceptoid", "concepto(id)", "RESTRICT", "RESTRICT")
 		db.Model(&structLiquidacion.Acumulador{}).AddForeignKey("liquidacionitemid", "liquidacionitem(id)", "CASCADE", "CASCADE")
 
-		if ObtenerVersionLiquidacionDB(db) < 4 {
+		versionLiquidacionDB := ObtenerVersionLiquidacionDB(db)
+
+		if versionLiquidacionDB < 4 {
 			err = unificarDatosEnLaTablaLiquidacionItem(db)
+		}
+
+		if versionLiquidacionDB < 7 {
+			err = db.Exec("DELETE FROM liquidacionitem WHERE id IN (SELECT li.id FROM liquidacionitem li LEFT JOIN concepto c ON li.conceptoid = c.id WHERE c.id IS NULL").Error
 		}
 
 	}

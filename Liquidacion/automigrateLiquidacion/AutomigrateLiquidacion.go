@@ -10,11 +10,17 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 	// para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structLiquidacion.Acumulador{}, &structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
 	if err == nil {
+
+		versionLiquidacionDB := ObtenerVersionLiquidacionDB(db)
+
+		if versionLiquidacionDB < 7 {
+			err = db.Exec("DELETE FROM liquidacionitem WHERE id IN (SELECT li.id FROM liquidacionitem li LEFT JOIN concepto c ON li.conceptoid = c.id WHERE c.id IS NULL)").Error
+		}
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("conceptoid", "concepto(id)", "RESTRICT", "RESTRICT")
 		db.Model(&structLiquidacion.Acumulador{}).AddForeignKey("liquidacionitemid", "liquidacionitem(id)", "CASCADE", "CASCADE")
 
-		if ObtenerVersionLiquidacionDB(db) < 4 {
+		if versionLiquidacionDB < 4 {
 			err = unificarDatosEnLaTablaLiquidacionItem(db)
 		}
 

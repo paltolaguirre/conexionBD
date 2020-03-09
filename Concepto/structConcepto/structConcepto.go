@@ -30,5 +30,5 @@ type Concepto struct {
 	Tipocalculoautomatico   *TipoCalculoAutomatico   `json:"tipocalculoautomatico" gorm:"ForeignKey:Tipocalculoautomaticoid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipocalculoautomaticoid *int                     `json:"tipocalculoautomaticoid"`
 	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulanombre;association_foreignkey:Name;association_autoupdate:false"`
-	Formulanombre           *string                  `json:"formulanombre"`
+	Formulanombre           *string                  `json:"formulanombre" sql:"type:string REFERENCES Function(Name)"`
 }

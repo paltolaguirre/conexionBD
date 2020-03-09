@@ -2,7 +2,7 @@ package structConcepto
 
 import "github.com/xubiosueldos/conexionBD/structGormModel"
 
-type TipoCalculoAutomatico struct {
+type Tipocalculoautomatico struct {
 	structGormModel.GormModel
 	Nombre      string `json:"nombre"`
 	Codigo      string `json:"codigo"`

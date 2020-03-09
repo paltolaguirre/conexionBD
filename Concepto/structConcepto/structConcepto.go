@@ -27,8 +27,8 @@ type Concepto struct {
 	Tipoimpuestoganancias   *Tipoimpuestoganancias   `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciasid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipoimpuestogananciasid *int                     `json:"tipoimpuestogananciasid"`
 	Eseditable              bool                     `json:"eseditable" gorm:"not null; default:true"`
-	Tipocalculoautomatico   *TipoCalculoAutomatico   `json:"tipocalculoautomatico" gorm:"ForeignKey:Tipocalculoautomaticoid;association_foreignkey:ID;association_autoupdate:false"`
+	Tipocalculoautomatico   *Tipocalculoautomatico   `json:"tipocalculoautomatico" gorm:"ForeignKey:Tipocalculoautomaticoid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipocalculoautomaticoid *int                     `json:"tipocalculoautomaticoid"`
 	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulanombre;association_foreignkey:Name;association_autoupdate:false"`
-	Formulanombre           *string                  `json:"formulanombre" sql:"type:string REFERENCES Function(Name)"`
+	Formulanombre           *string                  `json:"formulanombre"`
 }

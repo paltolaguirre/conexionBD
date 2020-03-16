@@ -18,9 +18,14 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
 	versionConceptoDB := ObtenerVersionConceptoDB(db)
 
-	if versionConceptoDB < 9 {
+	if versionConceptoDB < 10 {
 		err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
 		err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
+
+		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
+		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
+
+		err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
 	}
 	return err
 }
@@ -44,9 +49,14 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-2, current_timestamp, 'Porcentaje', 'PORCENTAJE', '', 1)")
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-3, current_timestamp, 'Formula', 'FORMULA', '', 1)")
 
-		if versionConceptoDB < 9 {
+		if versionConceptoDB < 10 {
 			err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
 			err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
+
+			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
+			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
+
+			err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
 		}
 
 	}

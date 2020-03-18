@@ -16,5 +16,5 @@ $$ LANGUAGE plpgsql;
 
 create view liquidaciones_all as select * from ST_liquidaciones_tenant() order by created_at DESC;
 
-GRANT ALL ON FUNCTION ST_liquidaciones_tenant to read_only;
+GRANT ALL ON ALL FUNCTIONS in schema public to read_only;
 GRANT ALL ON liquidaciones_all to read_only;

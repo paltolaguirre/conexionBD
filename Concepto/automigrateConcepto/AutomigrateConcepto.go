@@ -48,6 +48,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-1, current_timestamp, 'No Aplica', 'NO_APLICA', '', 1)")
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-2, current_timestamp, 'Porcentaje', 'PORCENTAJE', '', 1)")
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-3, current_timestamp, 'Formula', 'FORMULA', '', 1)")
+		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-32, current_timestamp,'Incremento Salarial Dto 14/20', 'INCREMENTO_SALARIAL_DTO_14_20',  '', 1, '',-46, true, -1,false, null, null, false, true, -1)")
 
 		if versionConceptoDB < 10 {
 			err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error

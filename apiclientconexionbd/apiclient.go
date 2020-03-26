@@ -69,6 +69,16 @@ func AutomigrateTablasPublicas(db *gorm.DB) error {
 		}
 	}
 
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
+
+		if err = automigrateFunction.AutomigrateFunctionTablasPublicas(db); err != nil {
+			return err
+		} else {
+
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
+		}
+	}
+
 	return err
 }
 
@@ -126,7 +136,7 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
 			return err
 		} else {
-
+			automigrateFunction.ObtenerFormulasPublicas(db)
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
 	}

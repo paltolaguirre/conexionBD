@@ -19,13 +19,15 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 	versionConceptoDB := ObtenerVersionConceptoDB(db)
 
 	if versionConceptoDB < 10 {
-		err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
-		err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
+		db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
+		db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
 
-		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
-		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
+		db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
+		db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
 
-		err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
+		db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
+
+		db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
 	}
 	return err
 }

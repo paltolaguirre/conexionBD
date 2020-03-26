@@ -29,16 +29,16 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 	if err == nil {
 		versionFunctionDB := ObtenerVersionFunctionDB(db)
 		if versionFunctionDB < 1 {
-			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(1,current_timestamp,'return',0,'',0,0,NULL)")
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(-1,current_timestamp,'return',0,'',0,0,NULL)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('GetParamValue', current_timestamp, 'Obtiene el valor de un parametro de la formula', 'primitive', 'internal', 'public', 'number', 1)")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(1,current_timestamp,'paramName','string','GetParamValue')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-1,current_timestamp,'paramName','string','GetParamValue')")
 
-			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(2,current_timestamp,'return',0,'',0,0,NULL)")
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(-2,current_timestamp,'return',0,'',0,0,NULL)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Sum', current_timestamp, 'Dado dos valores obtiene la suma de ambos', 'primitive', 'operator', 'public', 'number', 2)")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(2,current_timestamp,'val1','number','Sum')")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(3,current_timestamp,'val2','number','Sum')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-2,current_timestamp,'val1','number','Sum')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-3,current_timestamp,'val2','number','Sum')")
 
-			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(3,current_timestamp,'return',0,'',0,0,NULL)")
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueinvokeid, arginvokeid, valueobject) VALUES(-3,current_timestamp,'return',0,'',0,0,NULL)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalImporteRemunerativo', current_timestamp, 'Dada una liquidacion obtiene la suma total de importes remunerativos de la misma', 'primitive', 'helper', 'public', 'number', 3)")
 		}
 	}

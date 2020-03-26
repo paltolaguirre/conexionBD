@@ -81,8 +81,8 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -3 WHERE ID IN (-5,-6)")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = false, tipoimpuestogananciasid = -2 WHERE ID IN (-8,-9,-10,-11,-13,-14)")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = true, basesac = true, tipoimpuestogananciasid = -2 WHERE ID = -12")
-		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = false, tipoimpuestogananciasid = -10 WHERE ID IN (-18,-19)")
-		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = false, tipoimpuestogananciasid = -11 WHERE ID = -20")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -10 WHERE ID IN (-18,-19)")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -11 WHERE ID = -20")
 
 	}
 	return err

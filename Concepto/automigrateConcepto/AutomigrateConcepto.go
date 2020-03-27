@@ -19,13 +19,15 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 	versionConceptoDB := ObtenerVersionConceptoDB(db)
 
 	if versionConceptoDB < 10 {
-		err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
-		err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
+		db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
+		db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
 
-		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
-		err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
+		db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
+		db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
 
-		err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
+		db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
+
+		db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
 	}
 	return err
 }
@@ -59,6 +61,30 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 
 			err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
 		}
+
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-1,current_timestamp,'Remuneración bruta','REMUNERACION_BRUTA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-2,current_timestamp,'Retribuciones no habituales','RETRIBUCIONES_NO_HABITUALES','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-3,current_timestamp,'Horas extras remuneración gravada','HORAS_EXTRAS_REMUNERACION_GRAVADA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-4,current_timestamp,'Movilidad y viáticos remuneración gravada','MOVILIDAD_Y_VIATICOS_REMUNERACION_GRAVADA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-5,current_timestamp,'Material didáctico personal docente remuneración gravada','MATERIAL_DIDACTICO_PERSONAL_DOCENTE_REMUNERACION_GRAVADA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-6,current_timestamp,'Remuneración no alcanzada o exenta','REMUNERACION_NO_ALCANZADA_O_EXENTA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-7,current_timestamp,'Horas extras remuneración exenta','HORAS_EXTRAS_REMUNERACION_EXENTA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-8,current_timestamp,'Movilidad y viáticos remuneración exenta','MOVILIDAD_Y_VIATICOS_REMUNERACION_EXENTA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-9,current_timestamp,'Material didáctico personal docente remuneración exenta','MATERIAL_DIDACTICO_PERSONAL_DOCENTE_REMUNERACION_EXENTA','',1, true, true, true, false, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-10,current_timestamp,'Aportes jubilatorios, retiros, pensiones o subsidios','APORTES_JUBILATORIOS_RETIROS_PENSIONES_O_SUBSIDIOS','',1, false, false, false, true, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-11,current_timestamp,'Aportes obra social','APORTES_OBRA_SOCIAL','',1, false, false, false, true, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-12,current_timestamp,'Cuota sindical','CUOTA_SINDICAL','',1, false, false, false, true, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-13,current_timestamp,'Descuentos obligatorios por ley nacional, provincial o municipal','DESCUENTOS_OBLIGATORIOS_POR_LEY_NACIONAL_PROVINCIAL_MUNICIPAL','',1, false, false, false, true, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-14,current_timestamp,'Gastos movilidad, viáticos abonados por el empleador','GASTOS_MOVILIDAD_VIATICOS_ABONADOS_POR_EL_EMPLEADOR','',1, false, false, false, true, false)")
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-15,current_timestamp,'Otras deducciones','OTRAS_DEDUCCIONES','',1, false, false, false, true, false)")
+
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -1 WHERE ID IN (-1,-3,-4,-15,-16,-17)")
+		db.Exec("UPDATE CONCEPTO SET tipoimpuestogananciasid = -1 WHERE ID = -2")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -3 WHERE ID IN (-5,-6)")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = false, tipoimpuestogananciasid = -2 WHERE ID IN (-8,-9,-10,-11,-13,-14)")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = true, basesac = true, tipoimpuestogananciasid = -2 WHERE ID = -12")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -10 WHERE ID IN (-18,-19)")
+		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -11 WHERE ID = -20")
 
 	}
 	return err

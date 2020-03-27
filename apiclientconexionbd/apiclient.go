@@ -136,7 +136,9 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
 			return err
 		} else {
-			automigrateFunction.ObtenerFormulasPublicas(db)
+			if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
+				return err
+			}
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
 	}

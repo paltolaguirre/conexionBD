@@ -12,23 +12,27 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structConcepto.Concepto{}).Error
 	if err == nil {
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipoconceptoid", "tipoconcepto(id)", "RESTRICT", "RESTRICT")
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipodecalculoid", "tipodecalculo(id)", "RESTRICT", "RESTRICT")
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipoimpuestogananciasid", "tipoimpuestoganancias(id)", "RESTRICT", "RESTRICT")
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("tipocalculoautomaticoid", "tipocalculoautomatico(id)", "RESTRICT", "RESTRICT")
 		db.Model(&structConcepto.Concepto{}).AddForeignKey("formulanombre", "function(name)", "RESTRICT", "RESTRICT")
-	}
-	/*
+
 		versionConceptoDB := ObtenerVersionConceptoDB(db)
 
 		if versionConceptoDB < 10 {
 			db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
 			db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
-
-			db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
-			db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
-
 			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
+			/*
+				db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
+				db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
 
-			db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
+				db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
+			*/
 		}
-	*/
+	}
+
 	return err
 }
 
@@ -38,29 +42,6 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 	if err == nil {
 
 		versionConceptoDB := ObtenerVersionConceptoDB(db)
-
-		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-29, current_timestamp,'Impuesto a las Ganancias', 'IMPUESTO_GANANCIAS',  '', 1, '',-46, true, -4,false, null, null, false, false, -1)")
-		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-30, current_timestamp,'Impuesto a las Ganancias (Devolución)', 'IMPUESTO_GANANCIAS_DEVOLUCION',  '', 1, '',-46, true, -2,false, null, null, false, false, -1)")
-		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-31, current_timestamp,'Cuota Sindical', 'CUOTA_SINDICAL',  '', 1, '',-46, true, -4,false, 2, -3, false, true, -12)")
-		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -18")
-		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -19")
-		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -20")
-		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -31")
-		db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
-		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-1, current_timestamp, 'No Aplica', 'NO_APLICA', '', 1)")
-		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-2, current_timestamp, 'Porcentaje', 'PORCENTAJE', '', 1)")
-		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-3, current_timestamp, 'Formula', 'FORMULA', '', 1)")
-		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-32, current_timestamp,'Incremento Salarial Dto 14/20', 'INCREMENTO_SALARIAL_DTO_14_20',  '', 1, '',-46, true, -1,false, null, null, false, true, -1)")
-
-		if versionConceptoDB < 10 {
-			err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
-			err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
-
-			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
-			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
-
-			err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
-		}
 
 		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-1,current_timestamp,'Remuneración bruta','REMUNERACION_BRUTA','',1, true, true, true, false, false)")
 		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-2,current_timestamp,'Retribuciones no habituales','RETRIBUCIONES_NO_HABITUALES','',1, true, true, true, false, false)")
@@ -78,6 +59,29 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-14,current_timestamp,'Gastos movilidad, viáticos abonados por el empleador','GASTOS_MOVILIDAD_VIATICOS_ABONADOS_POR_EL_EMPLEADOR','',1, false, false, false, true, false)")
 		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-15,current_timestamp,'Otras deducciones','OTRAS_DEDUCCIONES','',1, false, false, false, true, false)")
 
+		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-29, current_timestamp,'Impuesto a las Ganancias', 'IMPUESTO_GANANCIAS',  '', 1, '',-46, true, -4,false, null, null, false, false, -1)")
+		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-30, current_timestamp,'Impuesto a las Ganancias (Devolución)', 'IMPUESTO_GANANCIAS_DEVOLUCION',  '', 1, '',-46, true, -2,false, null, null, false, false, -1)")
+		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-31, current_timestamp,'Cuota Sindical', 'CUOTA_SINDICAL',  '', 1, '',-46, true, -4,false, 2, -3, false, true, -12)")
+		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -18")
+		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -19")
+		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -20")
+		db.Exec("UPDATE CONCEPTO SET basesac = true WHERE id = -31")
+		//db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
+		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-1, current_timestamp, 'No Aplica', 'NO_APLICA', '', 1)")
+		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-2, current_timestamp, 'Porcentaje', 'PORCENTAJE', '', 1)")
+		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-3, current_timestamp, 'Formula', 'FORMULA', '', 1)")
+		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-32, current_timestamp,'Incremento Salarial Dto 14/20', 'INCREMENTO_SALARIAL_DTO_14_20',  '', 1, '',-46, true, -1,false, null, null, false, true, -1)")
+
+		if versionConceptoDB < 10 {
+			err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
+			err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
+
+			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29").Error
+			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
+
+			err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
+		}
+
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -1 WHERE ID IN (-1,-3,-4,-15,-16,-17)")
 		db.Exec("UPDATE CONCEPTO SET tipoimpuestogananciasid = -1 WHERE ID = -2")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -3 WHERE ID IN (-5,-6)")
@@ -92,14 +96,14 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 
 func ObtenerConceptosPublicos(db *gorm.DB) error {
 	var conceptos []structConcepto.Concepto
-	var tiposConcepto []structConcepto.Tipoconcepto
+	/*var tiposConcepto []structConcepto.Tipoconcepto
 	var tiposCalculo []structConcepto.Tipodecalculo
 	var tiposImpuestoGanancias []structConcepto.Tipoimpuestoganancias
-	var tiposCalculoAutomatico []structConcepto.Tipocalculoautomatico
+	var tiposCalculoAutomatico []structConcepto.Tipocalculoautomatico*/
 
 	db_public := conexionBD.ObtenerDB("public")
 
-	db_public.Find(&tiposConcepto)
+	/*db_public.Find(&tiposConcepto)
 	for _, tipoConcepto := range tiposConcepto {
 		if err := db.Save(&tipoConcepto).Error; err != nil {
 			return err
@@ -125,7 +129,7 @@ func ObtenerConceptosPublicos(db *gorm.DB) error {
 		if err := db.Save(&tipoCalculoAutomatico).Error; err != nil {
 			return err
 		}
-	}
+	}*/
 
 	db_public.Find(&conceptos)
 	for i := 0; i < len(conceptos); i++ {

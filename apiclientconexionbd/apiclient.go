@@ -87,6 +87,17 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
+		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
+			return err
+		} else {
+			if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
+				return err
+			}
+			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
+		}
+	}
+
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
 
 		if err = automigrateLegajo.AutomigrateLegajoTablasPrivadas(db); err != nil {
@@ -101,7 +112,9 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 		if err = automigrateConcepto.AutomigrateConceptoTablasPrivadas(db); err != nil {
 			return err
 		} else {
-			automigrateConcepto.ObtenerConceptosPublicos(db)
+			if err = automigrateConcepto.ObtenerConceptosPublicos(db); err != nil {
+				return err
+			}
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.Concepto, db)
 		}
 	}
@@ -129,17 +142,6 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 		} else {
 
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
-		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
-			return err
-		} else {
-			if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
-				return err
-			}
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
 	}
 

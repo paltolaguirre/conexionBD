@@ -67,7 +67,7 @@ func ObtenerFormulasPublicas(db *gorm.DB) error {
 			return err
 		}
 		for _, param := range params {
-			if err := db.Create(&param).Error; err != nil {
+			if err := db.Save(&param).Error; err != nil {
 				return err
 			}
 		}

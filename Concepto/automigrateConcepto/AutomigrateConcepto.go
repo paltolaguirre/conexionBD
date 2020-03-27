@@ -1,34 +1,34 @@
 package automigrateConcepto
 
 import (
-	"net/http"
-
 	"github.com/xubiosueldos/conexionBD"
 
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
-	"github.com/xubiosueldos/framework"
 )
 
 func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
 	err := db.AutoMigrate(&structConcepto.Concepto{}).Error
-	db.Model(&structConcepto.Concepto{}).AddForeignKey("Formulanombre", "Function(Name)", "RESTRICT", "RESTRICT")
-
-	versionConceptoDB := ObtenerVersionConceptoDB(db)
-
-	if versionConceptoDB < 10 {
-		db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
-		db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
-
-		db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
-		db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
-
-		db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
-
-		db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
+	if err == nil {
+		db.Model(&structConcepto.Concepto{}).AddForeignKey("formulanombre", "function(name)", "RESTRICT", "RESTRICT")
 	}
+	/*
+		versionConceptoDB := ObtenerVersionConceptoDB(db)
+
+		if versionConceptoDB < 10 {
+			db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
+			db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
+
+			db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
+			db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
+
+			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
+
+			db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
+		}
+	*/
 	return err
 }
 
@@ -90,20 +90,50 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 	return err
 }
 
-func ObtenerConceptosPublicos(db *gorm.DB) {
-	var w http.ResponseWriter
+func ObtenerConceptosPublicos(db *gorm.DB) error {
 	var conceptos []structConcepto.Concepto
+	var tiposConcepto []structConcepto.Tipoconcepto
+	var tiposCalculo []structConcepto.Tipodecalculo
+	var tiposImpuestoGanancias []structConcepto.Tipoimpuestoganancias
+	var tiposCalculoAutomatico []structConcepto.Tipocalculoautomatico
 
-	// nil hace referencia a la funcion automigrate
 	db_public := conexionBD.ObtenerDB("public")
+
+	db_public.Find(&tiposConcepto)
+	for _, tipoConcepto := range tiposConcepto {
+		if err := db.Save(&tipoConcepto).Error; err != nil {
+			return err
+		}
+	}
+
+	db_public.Find(&tiposCalculo)
+	for _, tipoCalculo := range tiposCalculo {
+		if err := db.Save(&tipoCalculo).Error; err != nil {
+			return err
+		}
+	}
+
+	db_public.Find(&tiposImpuestoGanancias)
+	for _, tipoImpuestoGanancias := range tiposImpuestoGanancias {
+		if err := db.Save(&tipoImpuestoGanancias).Error; err != nil {
+			return err
+		}
+	}
+
+	db_public.Find(&tiposCalculoAutomatico)
+	for _, tipoCalculoAutomatico := range tiposCalculoAutomatico {
+		if err := db.Save(&tipoCalculoAutomatico).Error; err != nil {
+			return err
+		}
+	}
 
 	db_public.Find(&conceptos)
 	for i := 0; i < len(conceptos); i++ {
 		concepto := conceptos[i]
 		if err := db.Save(&concepto).Error; err != nil {
-			framework.RespondError(w, http.StatusInternalServerError, err.Error())
-			return
+			return err
 		}
 	}
 
+	return nil
 }

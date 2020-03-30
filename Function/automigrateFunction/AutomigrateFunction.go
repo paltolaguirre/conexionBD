@@ -16,6 +16,7 @@ func AutomigrateFunctionTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structFunction.Invoke{}).AddForeignKey("functionname", "function(name)", "CASCADE", "CASCADE")
 		db.Model(&structFunction.Value{}).AddForeignKey("valueinvokeid", "invoke(id)", "CASCADE", "CASCADE")
 	}
+
 	return err
 
 }

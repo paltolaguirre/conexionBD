@@ -1,6 +1,11 @@
 package apiclientconexionbd
 
 import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strconv"
+
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Autenticacion/automigrateAutenticacion"
 	"github.com/xubiosueldos/conexionBD/Concepto/automigrateConcepto"
@@ -32,16 +37,27 @@ func AutomigrateTablasPublicas(db *gorm.DB) error {
 
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
+		/*if err = automigrateFunction.AutomigrateFunctionTablasPublicas(db); err != nil {
+			return err
+		}*/
 
+		if err = PublicAutomigrateScripts(db, automigrateFunction.Function, automigrateFunction.ObtenerVersionFunctionConfiguracion()); err != nil {
+			return err
+		}
+
+		versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
+	}
+
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
 		if err = automigrateLegajo.AutomigrateLegajoTablasPublicas(db); err != nil {
 			return err
 		} else {
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.Legajo, db)
 		}
 	}
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
 
+	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
 		if err = automigrateConcepto.AutomigrateConceptoTablasPublicas(db); err != nil {
 			return err
 		} else {
@@ -50,7 +66,6 @@ func AutomigrateTablasPublicas(db *gorm.DB) error {
 	}
 
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.ObtenerVersionLiquidacionDB(db)) {
-
 		if err = automigrateLiquidacion.AutomigrateLiquidacionTablasPublicas(db); err != nil {
 			return err
 		} else {
@@ -60,22 +75,11 @@ func AutomigrateTablasPublicas(db *gorm.DB) error {
 	}
 
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.ObtenerVersionSiradigDB(db)) {
-
 		if err = automigrateSiradig.AutomigrateSiradigTablasPublicas(db); err != nil {
 			return err
 		} else {
 
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
-
-		if err = automigrateFunction.AutomigrateFunctionTablasPublicas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
 	}
 
@@ -90,12 +94,17 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
 		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
 			return err
-		} else {
-			if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
-				return err
-			}
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
+
+		if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
+			return err
+		}
+
+		if err = PrivateAutomigrateScripts(db, automigrateFunction.Function, automigrateFunction.ObtenerVersionFunctionConfiguracion()); err != nil {
+			return err
+		}
+
+		versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 	}
 
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
@@ -146,4 +155,44 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 	}
 
 	return err
+}
+
+func PrivateAutomigrateScripts(db *gorm.DB, microserviceName string, to int) error {
+	for i := 0; i < to; i++ {
+		if err := runScript(db, "private", microserviceName, i+1); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func PublicAutomigrateScripts(db *gorm.DB, microserviceName string, to int) error {
+	for i := 0; i < to; i++ {
+		if err := runScript(db, "public", microserviceName, i+1); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func runScript(db *gorm.DB, dir string, microserviceName string, version int) error {
+	content, err := ioutil.ReadFile("Scripts/" + dir + "/automigrate_" + microserviceName + "_" + strconv.Itoa(version) + ".sql")
+	if err != nil {
+		switch err {
+		case err.(*os.PathError):
+			fmt.Println(err)
+		default:
+			return err
+		}
+	}
+
+	// Convert []byte to string and print to screen
+	text := string(content)
+	fmt.Println("SQL RUN: " + text)
+
+	if err = db.Exec(text).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

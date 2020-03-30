@@ -24,7 +24,7 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 			db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null")
 			db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null")
 			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1")
-			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid = -1")
+			db.Exec("update concepto set eseditable = true where tipocalculoautomaticoid = -1")
 			/*
 				db.Exec("update concepto set formulanombre = 'ImpuestoALasGanancias', tipocalculoautomaticoid = -3 where id = -29")
 				db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30")
@@ -81,6 +81,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			err = db.Exec("update concepto set formulanombre = 'ImpuestoALasGananciasDevolucion', tipocalculoautomaticoid = -3 where id = -30").Error
 
 			err = db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid != -1").Error
+			err = db.Exec("update concepto set eseditable = true where tipocalculoautomaticoid = -1").Error
 		}
 
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -1 WHERE ID IN (-1,-3,-4,-15,-16,-17)")

@@ -26,7 +26,7 @@ type Concepto struct {
 	Basesac                 bool                     `json:"basesac"`
 	Tipoimpuestoganancias   *Tipoimpuestoganancias   `json:"tipoimpuestoganancias" gorm:"ForeignKey:Tipoimpuestogananciasid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipoimpuestogananciasid *int                     `json:"tipoimpuestogananciasid"`
-	Eseditable              bool                     `json:"eseditable" gorm:"not null; default:true"`
+	Eseditable              bool                     `json:"eseditable"`
 	Tipocalculoautomatico   *Tipocalculoautomatico   `json:"tipocalculoautomatico" gorm:"ForeignKey:Tipocalculoautomaticoid;association_foreignkey:ID;association_autoupdate:false"`
 	Tipocalculoautomaticoid *int                     `json:"tipocalculoautomaticoid"`
 	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulanombre;association_foreignkey:Name;association_autoupdate:false"`

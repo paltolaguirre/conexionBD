@@ -96,6 +96,10 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -10 WHERE ID IN (-18,-19)")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, tipoimpuestogananciasid = -11 WHERE ID = -20")
 
+		if versionConceptoDB < 13 {
+			db.Exec("update concepto set esremvariable = false where esremvariable is NULL")
+		}
+
 	}
 	return err
 }

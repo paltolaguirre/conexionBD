@@ -32,6 +32,10 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 				db.Exec("UPDATE CONCEPTO SET eseditable = false WHERE id in (-29, -30)")
 			*/
 		}
+
+		if versionConceptoDB < 13 {
+			db.Exec("update concepto set esremvariable = false where esremvariable is NULL")
+		}
 	}
 
 	return err

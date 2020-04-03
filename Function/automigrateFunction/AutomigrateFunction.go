@@ -44,6 +44,40 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-5,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('ImpuestoALasGananciasDevolucion', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -5)")
 		}
+		
+		if versionFunctionDB < 2 {
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-6,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Sueldo', current_timestamp, 'Sueldo ingresado en el campo Remuneración del Legajo', 'primitive', 'helper', 'public', 'number', -6)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-7,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('HorasMensuales', current_timestamp, 'Horas ingresadas en el campo Horas Mensuales Normales del legajo', 'primitive', 'helper', 'public', 'number', -7)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-8,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DiasMesTrabajadosFechaLiquidacion', current_timestamp, 'Cantidad de dias desde el primero del mes hasta la fecha de la liquidación', 'primitive', 'helper', 'public', 'number', -8)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-9,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DiasMesTrabajadosFechaPeriodo', current_timestamp, 'Cantidad de dias desde el primero del mes hasta el último día del período liquidado', 'primitive', 'helper', 'public', 'number', -9)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-10,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('ValorDíasVacaciones', current_timestamp, 'Valor de los días correspondientes a las Vacaciones', 'primitive', 'helper', 'public', 'number', -10)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-11,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalHaberesNoRemunerativosMensual', current_timestamp, 'Total de conceptos no remunerativos de la liquidación', 'primitive', 'helper', 'public', 'number', -11)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-12,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalAportesPatronalesMensual', current_timestamp, 'Total de conceptos de aportes patronales de la liquidación', 'primitive', 'helper', 'public', 'number', -12)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-13,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalRetencionesMensual', current_timestamp, 'Total de conceptos de retenciones de la liquidación', 'primitive', 'helper', 'public', 'number', -13)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-14,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('CantidadMesesTrabajados', current_timestamp, 'La cantidad de meses trabajados desde  Legajo > Fecha de Ingreso  hasta la Fecha de la liquidación', 'primitive', 'helper', 'public', 'number', -14)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-15,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalDescuentosMensual', current_timestamp, 'Total de conceptos de descuentos de la liquidación', 'primitive', 'helper', 'public', 'number', -15)")
+
+		}
 	}
 	return err
 }

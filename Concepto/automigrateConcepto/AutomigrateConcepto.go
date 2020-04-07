@@ -98,6 +98,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 
 		if versionConceptoDB < 13 {
 			db.Exec("update concepto set esremvariable = false where esremvariable is NULL")
+			db.Exec("update concepto set esremvariable = true where id in (-5, -6)")
 		}
 
 	}

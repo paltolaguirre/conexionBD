@@ -158,8 +158,10 @@ func AutomigrateTablasPrivadas(db *gorm.DB) error {
 }
 
 func PrivateAutomigrateScripts(db *gorm.DB, microserviceName string, to int) error {
-	for i := 0; i < to; i++ {
-		if err := runScript(db, "private", microserviceName, i+1); err != nil {
+	currentVersion := versiondbmicroservicio.UltimaVersion(microserviceName, db)
+
+	for i := currentVersion; i < to; i++ {
+		if err := runScript(db, "private", microserviceName, i); err != nil {
 			return err
 		}
 	}
@@ -167,8 +169,10 @@ func PrivateAutomigrateScripts(db *gorm.DB, microserviceName string, to int) err
 }
 
 func PublicAutomigrateScripts(db *gorm.DB, microserviceName string, to int) error {
-	for i := 0; i < to; i++ {
-		if err := runScript(db, "public", microserviceName, i+1); err != nil {
+	currentVersion := versiondbmicroservicio.UltimaVersion(microserviceName, db)
+
+	for i := currentVersion; i < to; i++ {
+		if err := runScript(db, "public", microserviceName, i); err != nil {
 			return err
 		}
 	}

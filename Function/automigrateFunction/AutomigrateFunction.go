@@ -69,7 +69,7 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('MejorRemNoRemunerativaSemestre', current_timestamp, 'Mejor Remuneración No Remunerativa del Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre)', 'primitive', 'helper', 'public', 'number', -12)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-13,current_timestamp,'return',0,'',false,null,0)")
-			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('ValorDíasVacaciones', current_timestamp, 'Valor de los días correspondientes a las Vacaciones', 'primitive', 'helper', 'public', 'number', -13)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('ValorDiasVacaciones', current_timestamp, 'Valor de los días correspondientes a las Vacaciones', 'primitive', 'helper', 'public', 'number', -13)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-14, current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('TotalHaberesNoRemunerativosMensual', current_timestamp, 'Total de conceptos no remunerativos de la liquidación', 'primitive', 'helper', 'public', 'number', -14)")

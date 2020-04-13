@@ -99,10 +99,10 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DíasEfectivamenteTrabajadosSemestre', current_timestamp, 'Cantidad de días efectivamente trabajados en el Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre). Días hábiles - Días Faltas injustificadas - Días enfermedad - Días accidente - Días de Licencia', 'primitive', 'helper', 'public', 'number', -22)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-23,current_timestamp,'return',0,'',false,null,0)")
-			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FechadeIngreso', current_timestamp, 'Fecha de ingreso del Legajo', 'primitive', 'helper', 'public', 'number', -23)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FechadeIngreso', current_timestamp, 'Fecha de ingreso del Legajo', 'primitive', 'helper', 'public', 'Time', -23)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-24,current_timestamp,'return',0,'',false,null,0)")
-			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FechadeLiquidacion', current_timestamp, 'Fecha de la liquidación donde se esta utilizando el concepto', 'primitive', 'helper', 'public', 'number', -24)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FechadeLiquidacion', current_timestamp, 'Fecha de la liquidación donde se esta utilizando el concepto', 'primitive', 'helper', 'public', 'Time', -24)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-25,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FecIngHASTAFecLiq', current_timestamp, 'Fecha de Ingreso hasta Fecha de Liquidacion expresada en años', 'primitive', 'helper', 'public', 'number', -25)")
@@ -130,6 +130,127 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-33,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('MejorRemRemunerativaBaseSACSemestre', current_timestamp, 'Mejor Remuneración del Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre), comparando grillas de Remunerativo - Descuentos solo de los conceptos que tienen configurado BASE_SAC = SI', 'primitive', 'helper', 'public', 'number', -33)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-34,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('GetConceptValue', current_timestamp, 'Obtiene el valor de un concepto', 'primitive', 'internal', 'public', 'number', -34)")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-4, current_timestamp, 'conceptid', 'number', 'GetConceptValue')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-35,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('If', current_timestamp, 'Retorna el primer valor si la condicion es verdadera y el segundo valor si la condicion es falsa', 'primitive', 'internal', 'public', 'number', -35)")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-5, current_timestamp, 'condicion', 'bool', 'If')")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-6, current_timestamp, 'valueTrue', 'number', 'If')")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-7, current_timestamp, 'valueFalse', 'number', 'If')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-36,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Equality', current_timestamp, 'Dado dos valores retorna si son iguales', 'primitive', 'operator', 'public', 'bool', -36)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-8,current_timestamp,'val1','number','Equality')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-9,current_timestamp,'val2','number','Equality')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-37,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Inequality', current_timestamp, 'Dado dos valores retorna si son distintos', 'primitive', 'operator', 'public', 'bool', -37)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-10,current_timestamp,'val1','number','Inequality')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-11,current_timestamp,'val2','number','Inequality')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-38,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Greater', current_timestamp, 'Dado dos valores retorna si el primero es mayor al segundo', 'primitive', 'operator', 'public', 'bool', -38)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-12,current_timestamp,'val1','number','Greater')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-13,current_timestamp,'val2','number','Greater')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-39,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('GreaterEqual', current_timestamp, 'Dado dos valores retorna si el primero es mayor o igual al segundo', 'primitive', 'operator', 'public', 'bool', -39)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-14,current_timestamp,'val1','number','GreaterEqual')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-15,current_timestamp,'val2','number','GreaterEqual')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-40,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Less', current_timestamp, 'Dado dos valores retorna si el primero es menor al segundo', 'primitive', 'operator', 'public', 'bool', -40)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-16,current_timestamp,'val1','number','Less')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-17,current_timestamp,'val2','number','Less')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-41,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('LessEqual', current_timestamp, 'Dado dos valores retorna si el primero es menor o igual al segundo', 'primitive', 'operator', 'public', 'bool', -41)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-14,current_timestamp,'val1','number','LessEqual')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-15,current_timestamp,'val2','number','LessEqual')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-42,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Not', current_timestamp, 'Dada un valor de verdad, devuelve el contrario', 'primitive', 'operator', 'public', 'bool', -42)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-16,current_timestamp,'val1','bool','Not')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-43,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('And', current_timestamp, 'Dados dos valores de verdad, devuelve el valor de verdad de la conjuncion (Solo es verdadero si ambos son verdaderos)', 'primitive', 'operator', 'public', 'bool', -43)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-17,current_timestamp,'val1','bool','And')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-18,current_timestamp,'val2','bool','And')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-44,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Or', current_timestamp, 'Dados dos valores de verdad, devuelve el valor de verdad de la disyuncion no excluyente (Solo es verdadero si alguno es verdadero)', 'primitive', 'operator', 'public', 'bool', -44)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-19,current_timestamp,'val1','bool','Or')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-20,current_timestamp,'val2','bool','Or')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-45,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Percent', current_timestamp, 'Dado un numero y un porcentaje, devuelve el numero que representa ese porcentaje', 'primitive', 'operator', 'public', 'number', -45)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-21,current_timestamp,'val','number','Percent')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-22,current_timestamp,'percent','number','Percent')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-46,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Diff', current_timestamp, 'Devuelve el primer numero menos el segundo numero', 'primitive', 'operator', 'public', 'number', -46)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-23,current_timestamp,'val1','number','Diff')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-24,current_timestamp,'val2','number','Diff')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-47,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Div', current_timestamp, 'Devuelve el primer numero dividido el segundo numero', 'primitive', 'operator', 'public', 'number', -47)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-25,current_timestamp,'val1','number','Div')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-26,current_timestamp,'val2','number','Div')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-48,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Multi', current_timestamp, 'Devuelve el primer numero multiplicado por el segundo numero', 'primitive', 'operator', 'public', 'number', -48)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-27,current_timestamp,'val','number','Multi')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-28,current_timestamp,'percent','number','Multi')")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-49,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Jornal', current_timestamp, 'Variable Sueldo / 30', 'primitive', 'helper', 'public', 'number', -49)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-50,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('ValorHora', current_timestamp, 'Variables Sueldo / HorasMensuales', 'primitive', 'helper', 'public', 'number', -50)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-51,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('HoraExtra50', current_timestamp, 'Variable ValorHora * 1,5 * Cantidad (será el campo Cantidad Ingresado en una Novedad)', 'primitive', 'helper', 'public', 'number', -51)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-52,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('HoraExtra100', current_timestamp, 'Variable ValorHora * 2 * Cantidad (será el campo Cantidad Ingresado en una Novedad)', 'primitive', 'helper', 'public', 'number', -52)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-53,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Sac', current_timestamp, 'Variable (MejorRemRemunerativaBaseSACSemestre / 2) * DiasSemTrabajados / 180', 'primitive', 'helper', 'public', 'number', -53)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-54,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('SacNoRemunerativo', current_timestamp, 'Variable (MejorRemNoRemunerativaSemestre / 2) * DiasSemTrabajados / 180', 'primitive', 'helper', 'public', 'number', -54)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-55,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Antiguedad', current_timestamp, 'Variable (MejorRemNoRemunerativaSemestre / 2) * DiasSemTrabajados / 180', 'primitive', 'helper', 'public', 'number', -55)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-56,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DíasFaltasInjustificadas', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -56)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-57,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Vacaciones', current_timestamp, 'Si la antiguedad es menor a 5 entonces le corresponden 14 dias de vacaciones. Entre 5 y 10 le corresponden 21 dias de vacaciones. Entre 10 y 15 le corresponden 28 dias de vacaciones. Mayor a 15 le corresponden 35 dias de vacaciones.', 'primitive', 'helper', 'public', 'number', -57)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-58,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Preaviso', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -58)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-59,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('SacSinPreaviso', current_timestamp, 'SAC sobre Preaviso', 'primitive', 'helper', 'public', 'number', -59)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-60,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('IntegracionMesDespido', current_timestamp, '( 30 - DiasMesTrabajados ) * Jornal', 'primitive', 'helper', 'public', 'number', -60)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-61,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('SacSinImd', current_timestamp, 'Integración mes Despido / 12', 'primitive', 'helper', 'public', 'number', -61)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-62,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('IndemnizacionPorDespido', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -62)")
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-63,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('CantidadSueldos', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -63)")
+
+
 
 		}
 	}

@@ -96,7 +96,7 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('MejorRemNormalYHabitualSemestre', current_timestamp, 'Mejor remuneración normal y habitual del Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre)', 'primitive', 'helper', 'public', 'number', -21)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-22,current_timestamp,'return',0,'',false,null,0)")
-			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DíasEfectivamenteTrabajadosSemestre', current_timestamp, 'Cantidad de días efectivamente trabajados en el Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre). Días hábiles - Días Faltas injustificadas - Días enfermedad - Días accidente - Días de Licencia', 'primitive', 'helper', 'public', 'number', -22)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DiasEfectivamenteTrabajadosSemestre', current_timestamp, 'Cantidad de días efectivamente trabajados en el Semestre (Semestre 1: Enero - Junio | Semestre 2: Julio - Diciembre). Días hábiles - Días Faltas injustificadas - Días enfermedad - Días accidente - Días de Licencia', 'primitive', 'helper', 'public', 'number', -22)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-23,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('FechadeIngreso', current_timestamp, 'Fecha de ingreso del Legajo', 'primitive', 'helper', 'public', 'Time', -23)")
@@ -227,7 +227,7 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Antiguedad', current_timestamp, 'Variable (MejorRemNoRemunerativaSemestre / 2) * DiasSemTrabajados / 180', 'primitive', 'helper', 'public', 'number', -55)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-56,current_timestamp,'return',0,'',false,null,0)")
-			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DíasFaltasInjustificadas', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -56)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('DiasFaltasInjustificadas', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -56)")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-57,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Vacaciones', current_timestamp, 'Si la antiguedad es menor a 5 entonces le corresponden 14 dias de vacaciones. Entre 5 y 10 le corresponden 21 dias de vacaciones. Entre 10 y 15 le corresponden 28 dias de vacaciones. Mayor a 15 le corresponden 35 dias de vacaciones.', 'primitive', 'helper', 'public', 'number', -57)")

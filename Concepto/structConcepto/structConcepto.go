@@ -31,4 +31,5 @@ type Concepto struct {
 	Tipocalculoautomaticoid *int                     `json:"tipocalculoautomaticoid"`
 	Formula                 *structFunction.Function `json:"formula" gorm:"ForeignKey:formulanombre;association_foreignkey:Name;association_autoupdate:false"`
 	Formulanombre           *string                  `json:"formulanombre"`
+	Esremvariable			bool					 `json:"esremvariable"`
 }

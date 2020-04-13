@@ -246,7 +246,8 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-62,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('IndemnizacionPorDespido', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -62)")
-
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-29,current_timestamp,'val','number','IndemnizacionPorDespido')")
+			
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-63,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('CantidadSueldos', current_timestamp, '', 'primitive', 'helper', 'public', 'number', -63)")
 

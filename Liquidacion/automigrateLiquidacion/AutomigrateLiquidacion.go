@@ -24,6 +24,10 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 			err = unificarDatosEnLaTablaLiquidacionItem(db)
 		}
 
+		if versionLiquidacionDB < 8 {
+			db.Exec("ALTER TABLE liquidacion ALTER COLUMN legajoid SET NOT NULL")
+		}
+
 	}
 	return err
 }

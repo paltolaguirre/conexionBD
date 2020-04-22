@@ -2,7 +2,6 @@ package automigrateFunction
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/xubiosueldos/conexionBD"
 	"github.com/xubiosueldos/conexionBD/Function/structFunction"
 )
 
@@ -259,7 +258,7 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 }
 
 func ObtenerFormulasPublicas(db *gorm.DB) error {
-	var formulas []structFunction.Function
+	/*var formulas []structFunction.Function
 
 	db_public := conexionBD.ObtenerDB("public")
 
@@ -283,5 +282,8 @@ func ObtenerFormulasPublicas(db *gorm.DB) error {
 		}
 	}
 
+	return nil*/
+
+	db.Exec("select ST_copy_formulas_public_privado()")
 	return nil
 }

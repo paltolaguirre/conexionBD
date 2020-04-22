@@ -1,8 +1,6 @@
 package automigrateConcepto
 
 import (
-	"github.com/xubiosueldos/conexionBD"
-
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
 )
@@ -111,13 +109,13 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 }
 
 func ObtenerConceptosPublicos(db *gorm.DB) error {
-	var conceptos []structConcepto.Concepto
+	//var conceptos []structConcepto.Concepto
 	/*var tiposConcepto []structConcepto.Tipoconcepto
 	var tiposCalculo []structConcepto.Tipodecalculo
 	var tiposImpuestoGanancias []structConcepto.Tipoimpuestoganancias
 	var tiposCalculoAutomatico []structConcepto.Tipocalculoautomatico*/
 
-	db_public := conexionBD.ObtenerDB("public")
+	//db_public := conexionBD.ObtenerDB("public")
 
 	/*db_public.Find(&tiposConcepto)
 	for _, tipoConcepto := range tiposConcepto {
@@ -147,13 +145,15 @@ func ObtenerConceptosPublicos(db *gorm.DB) error {
 		}
 	}*/
 
-	db_public.Find(&conceptos)
+	/*db_public.Find(&conceptos)
 	for i := 0; i < len(conceptos); i++ {
 		concepto := conceptos[i]
 		if err := db.Save(&concepto).Error; err != nil {
 			return err
 		}
-	}
+	}*/
+
+	db.Exec("select ST_copy_concepto_public_privado()")
 
 	return nil
 }

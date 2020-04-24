@@ -136,9 +136,9 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-35,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('If', current_timestamp, 'Retorna el primer valor si la condicion es verdadera y el segundo valor si la condicion es falsa', 'primitive', 'internal', 'public', 'number', -35)")
-			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-5, current_timestamp, 'condicion', 'boolean', 'If')")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-7, current_timestamp, 'condicion', 'boolean', 'If')")
 			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-6, current_timestamp, 'valueTrue', 'number', 'If')")
-			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-7, current_timestamp, 'valueFalse', 'number', 'If')")
+			db.Exec("INSERT INTO param(id, created_at, name, type, functionname) VALUES(-5, current_timestamp, 'valueFalse', 'number', 'If')")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-36,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Equality', current_timestamp, 'Dado dos valores retorna si son iguales', 'primitive', 'operator', 'public', 'boolean', -36)")

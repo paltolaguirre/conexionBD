@@ -42,8 +42,9 @@ func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
 	//abro una transacción para que si hay un error no persista en la DB
 	var err error
 	tx := db.Begin()
+	defer tx.Rollback();
+
 	if err = insertTablaLiquidacionTipo(tx); err != nil {
-		tx.Rollback()
 		return err
 	}
 	tx.Commit()

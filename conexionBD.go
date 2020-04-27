@@ -20,7 +20,7 @@ func ConnectBD(tenant string) *gorm.DB {
 
 		panic("failed to connect database: " + err.Error())
 	}
-	db.DB().SetConnMaxLifetime(time.Second * 120)
+	db.DB().SetConnMaxLifetime(time.Second * 300)
 	//db.DB().SetMaxIdleConns()
 	//db.DB().SetMaxOpenConns()
 	//Crea el schema si no existe

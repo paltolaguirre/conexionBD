@@ -167,16 +167,12 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-41,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('LessEqual', current_timestamp, 'Dado dos valores retorna si el primero es menor o igual al segundo', 'primitive', 'operator', 'public', 'boolean', -41)")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-14,current_timestamp,'val1','number','LessEqual')")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-15,current_timestamp,'val2','number','LessEqual')")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-42,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('Not', current_timestamp, 'Dada un valor de verdad, devuelve el contrario', 'primitive', 'operator', 'public', 'boolean', -42)")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-16,current_timestamp,'val1','boolean','Not')")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-43,current_timestamp,'return',0,'',false,null,0)")
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('And', current_timestamp, 'Dados dos valores de verdad, devuelve el valor de verdad de la conjuncion (Solo es verdadero si ambos son verdaderos)', 'primitive', 'operator', 'public', 'boolean', -43)")
-			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-17,current_timestamp,'val1','boolean','And')")
 			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-18,current_timestamp,'val2','boolean','And')")
 
 			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-44,current_timestamp,'return',0,'',false,null,0)")
@@ -251,6 +247,18 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('CantidadSueldos', current_timestamp, '', 'primitive', 'generic', 'public', 'number', -63)")
 
 
+
+		}
+
+		if versionFunctionDB < 3 {
+
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-30,current_timestamp,'val1','number','LessEqual')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-31,current_timestamp,'val2','number','LessEqual')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-32,current_timestamp,'val1','boolean','Not')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-33,current_timestamp,'val1','boolean','And')")
+
+			db.Exec("delete from value where id in (-51, -52, -24, -23)")
+			db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
 
 		}
 	}

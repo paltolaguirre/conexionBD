@@ -253,6 +253,14 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 
 		}
+
+		if versionFunctionDB < 3 {
+
+
+			db.Exec("delete from value where id in (-51, -52, -24, -23)")
+			db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
+
+		}
 	}
 	return err
 }

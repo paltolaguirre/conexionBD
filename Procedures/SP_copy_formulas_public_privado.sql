@@ -3,6 +3,8 @@ BEGIN
         insert into value select * from public.value where public.value.id not in (select id from value);
         insert into function select * from public.function where public.function.name not in (select name from function);
         insert into param select * from public.param where public.param.id not in (select id from param);
+        insert into invoke (id) select id from public.invoke where public.invoke.id not in (select id from invoke);
+
 
         EXECUTE (
             SELECT
@@ -27,6 +29,15 @@ BEGIN
                                 'UPDATE param as par SET   (' || string_agg(quote_ident(column_name), ',') || ') = (' || string_agg('public.param.' || quote_ident(column_name), ',') || ') FROM public.param WHERE par.id = public.param.id'
             FROM   information_schema.columns
             WHERE  table_name   = 'param'       -- table name, case sensitive
+              AND    table_schema = 'public'  -- schema name, case sensitive
+              AND    column_name <> 'id'      -- all columns except id
+        );
+
+        EXECUTE (
+            SELECT
+                                'UPDATE invoke as v SET   (' || string_agg(quote_ident(column_name), ',') || ') = (' || string_agg('public.invoke.' || quote_ident(column_name), ',') || ') FROM public.invoke WHERE v.id = public.invoke.id'
+            FROM   information_schema.columns
+            WHERE  table_name   = 'invoke'       -- table name, case sensitive
               AND    table_schema = 'public'  -- schema name, case sensitive
               AND    column_name <> 'id'      -- all columns except id
         );

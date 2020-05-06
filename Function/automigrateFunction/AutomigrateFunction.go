@@ -261,6 +261,12 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
 
 		}
+
+		if versionFunctionDB < 4 {
+			db.Exec("insert into invoke (id, functionname) values (-804,	'If'), (-819,	'LessEqual'), (-817,	'Multi'), (-805,	'If'),	 (-820,	'Antiguedad'), (-818,	'ValorDiasVacaciones'), (-815,	'LessEqual'), (-813,	'Multi'), (-806,	'If'), (-816,	'Antiguedad'), (-814,	'ValorDiasVacaciones'), (-811,	'LessEqual'), (-809,	'Multi'), (-807,	'Multi'), (-812,	'Antiguedad'), (-810,	'ValorDiasVacaciones'), (-808,	'ValorDiasVacaciones')")
+			db.Exec("insert into value (id, name,valuenumber, valuestring, valueboolean,	valueinvokeid, arginvokeid) values (-705, 'null', 0.0000, '', false, -804, 0), (-726, 'condicion', 0.0000, '', false, -819, -804), (-723, 'valueTrue', 0.0000, '', false, -817, -804), (-706, 'valueFalse', 0.0000, '', false, -805, -804), (-728, 'val1', 0.0000, '', false, -820, -819), (-727, 'val2', 5.0000, '', false, null, -819), (-725, 'val', 0.0000, '', false, -818, -817), (-724, 'percent', 14.0000, '', false, null, -817), (-720, 'condicion', 0.0000, '', false, -815, -805), (-717, 'valueTrue', 0.0000, '', false, -813, -805), (-707, 'valueFalse', 0.0000, '', false, -806, -805), (-722, 'val1', 0.0000, '', false, -816, -815), (-721, 'val2', 10.0000, '', false, null, -815), (-719, 'val', 0.0000, '', false, -814, -813), (-718, 'percent', 21.0000, '', false, null, -813), (-714, 'condicion', 0.0000, '', false, -811, -806), (-711, 'valueTrue', 0.0000, '', false, -809, -806), (-708, 'valueFalse', 0.0000, '', false, -807, -806), (-716, 'val1', 0.0000, '', false, -812, -811), (-715, 'val2', 15.0000, '', false, null, -811), (-713, 'val', 0.0000, '', false, -810, -809), (-712, 'percent', 28.0000, '', false, null, -809), (-710, 'val', 0.0000, '', false, -808, -807), (-709, 'percent', 35.0000, '', false, null, -807)")
+			db.Exec("update function set type = 'generic', valueid = -705)")
+		}
 	}
 	return err
 }

@@ -268,6 +268,16 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 
 		}
+
+		if versionFunctionDB < 5 {
+
+			db.Exec("ALTER SEQUENCE public.value_id_seq MINVALUE -2000000000")
+			db.Exec("ALTER SEQUENCE public.invoke_id_seq MINVALUE -2000000000")
+			db.Exec("ALTER SEQUENCE public.param_id_seq MINVALUE -2000000000")
+			db.Exec("ALTER SEQUENCE public.value_id_seq RESTART WITH -2000000000")
+			db.Exec("ALTER SEQUENCE public.invoke_id_seq RESTART WITH -2000000000")
+			db.Exec("ALTER SEQUENCE public.param_id_seq RESTART WITH -2000000000")
+		}
 	}
 	return err
 }

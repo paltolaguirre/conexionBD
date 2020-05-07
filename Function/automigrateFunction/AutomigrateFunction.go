@@ -278,6 +278,15 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("ALTER SEQUENCE public.invoke_id_seq RESTART WITH -2000000000")
 			db.Exec("ALTER SEQUENCE public.param_id_seq RESTART WITH -2000000000")
 		}
+
+		if versionFunctionDB < 6 {
+
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-65,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('BooleanInequality', current_timestamp, 'Dado dos valores booleanos retorna si son distintos', 'primitive', 'operator', 'public', 'boolean', -65)")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-34,current_timestamp,'val1','boolean','BooleanInequality')")
+			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-35,current_timestamp,'val2','boolean','BooleanInequality')")
+
+		}
 	}
 	return err
 }

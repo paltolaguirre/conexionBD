@@ -8,12 +8,24 @@ import (
 func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 
 	// para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
+	err := db.AutoMigrate(&structLiquidacion.Acumulador{}, &structLiquidacion.Liquidacionitem{}, &structLiquidacion.Liquidacion{}).Error
 	if err == nil {
-		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
 
-		if ObtenerVersionLiquidacionDB(db) < 4 {
+		versionLiquidacionDB := ObtenerVersionLiquidacionDB(db)
+
+		if versionLiquidacionDB < 7 {
+			err = db.Exec("DELETE FROM liquidacionitem WHERE id IN (SELECT li.id FROM liquidacionitem li LEFT JOIN concepto c ON li.conceptoid = c.id WHERE c.id IS NULL)").Error
+		}
+		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("liquidacionid", "liquidacion(id)", "CASCADE", "CASCADE")
+		db.Model(&structLiquidacion.Liquidacionitem{}).AddForeignKey("conceptoid", "concepto(id)", "RESTRICT", "RESTRICT")
+		db.Model(&structLiquidacion.Acumulador{}).AddForeignKey("liquidacionitemid", "liquidacionitem(id)", "CASCADE", "CASCADE")
+
+		if versionLiquidacionDB < 4 {
 			err = unificarDatosEnLaTablaLiquidacionItem(db)
+		}
+
+		if versionLiquidacionDB < 8 {
+			db.Exec("ALTER TABLE liquidacion ALTER COLUMN legajoid SET NOT NULL")
 		}
 
 	}
@@ -30,8 +42,9 @@ func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
 	//abro una transacción para que si hay un error no persista en la DB
 	var err error
 	tx := db.Begin()
+	defer tx.Rollback();
+
 	if err = insertTablaLiquidacionTipo(tx); err != nil {
-		tx.Rollback()
 		return err
 	}
 	tx.Commit()

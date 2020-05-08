@@ -17,13 +17,16 @@ func ConnectBD(tenant string) *gorm.DB {
 	db, err = gorm.Open("postgres", "host= "+configuracion.Ip+" port=5432 user=postgres dbname= "+configuracion.Namedb+" password="+configuracion.Passdb+" sslmode="+configuracion.Ssldb)
 
 	if err != nil {
-		panic("failed to connect database")
+
+		panic("failed to connect database: " + err.Error())
 	}
-	db.DB().SetConnMaxLifetime(time.Second * 120)
+	db.DB().SetConnMaxLifetime(time.Second * 300)
 	//db.DB().SetMaxIdleConns()
 	//db.DB().SetMaxOpenConns()
 	//Crea el schema si no existe
+
 	db.Exec("CREATE SCHEMA IF NOT EXISTS " + tenant)
+
 
 	db.SingularTable(true)
 
@@ -32,6 +35,8 @@ func ConnectBD(tenant string) *gorm.DB {
 		db.Exec("SET search_path = " + tenant)
 
 	} else {
+		db.Exec("GRANT USAGE ON SCHEMA " + tenant + " TO read_only")
+		db.Exec("ALTER DEFAULT PRIVILEGES FOR USER postgres	IN SCHEMA " + tenant +" GRANT SELECT ON TABLES TO read_only")
 		db.Exec("SET search_path = " + tenant + ",public")
 	}
 

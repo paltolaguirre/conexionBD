@@ -53,7 +53,7 @@ DO $$
 BEGIN
     INSERT INTO deduccionespersonales(created_at,activo,valorfijoconyuge,valorfijohijo,valorfijomni,valorfijoddei,anio)
     VALUES
-    (current_timestamp, 1, 80033.90, 40361.43, 103018.79, 494490.18, 2019),
+    (current_timestamp, 1, 80033.97, 40361.43, 103018.79, 494490.18, 2019),
     (current_timestamp, 1, 115471.38, 58232.65, 123861.17, 594533.62, 2020);
 
     UPDATE public.deduccionespersonales SET id = -id;

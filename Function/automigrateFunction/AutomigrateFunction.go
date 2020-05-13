@@ -17,10 +17,9 @@ func AutomigrateFunctionTablasPrivadas(db *gorm.DB) error {
 	}
 	versionFunctionDB := ObtenerVersionFunctionDB(db)
 	if versionFunctionDB < 3 {
-
-		db.Exec("delete from value where id in (-51, -52, -24, -23)")
+		
 		db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
-
+		db.Exec("delete from value where id in (-51, -52, -24, -23)")
 	}
 
 	return err

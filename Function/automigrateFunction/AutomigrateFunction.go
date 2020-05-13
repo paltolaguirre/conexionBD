@@ -15,6 +15,14 @@ func AutomigrateFunctionTablasPrivadas(db *gorm.DB) error {
 		db.Model(&structFunction.Invoke{}).AddForeignKey("functionname", "function(name)", "CASCADE", "CASCADE")
 		db.Model(&structFunction.Value{}).AddForeignKey("valueinvokeid", "invoke(id)", "CASCADE", "CASCADE")
 	}
+	versionFunctionDB := ObtenerVersionFunctionDB(db)
+	if versionFunctionDB < 3 {
+
+		db.Exec("delete from value where id in (-51, -52, -24, -23)")
+		db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
+
+	}
+
 	return err
 
 }
@@ -257,8 +265,8 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-32,current_timestamp,'val1','boolean','Not')")
 			db.Exec("INSERT INTO param(id,created_at, name, type, functionname) VALUES(-33,current_timestamp,'val1','boolean','And')")
 
-			db.Exec("delete from value where id in (-51, -52, -24, -23)")
 			db.Exec("delete from function where name in ('HoraExtra50', 'HoraExtra100', 'FechadeIngreso', 'FechadeLiquidacion')")
+			db.Exec("delete from value where id in (-51, -52, -24, -23)")
 
 		}
 		if versionFunctionDB < 4 {

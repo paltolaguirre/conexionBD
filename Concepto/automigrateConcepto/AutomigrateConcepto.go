@@ -75,6 +75,9 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		db.Exec("INSERT INTO TIPOCALCULOAUTOMATICO(id, created_at, nombre, codigo, descripcion, activo) VALUES(-3, current_timestamp, 'Formula', 'FORMULA', '', 1)")
 		db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid) VALUES(-32, current_timestamp,'Incremento Salarial Dto 14/20', 'INCREMENTO_SALARIAL_DTO_14_20',  '', 1, '',-46, true, -1,false, null, null, false, true, -1)")
 
+		db.Exec("INSERT INTO TIPOIMPUESTOGANANCIAS(id,created_at, nombre, codigo, descripcion, activo, aplicaimporteremunerativo, aplicaimportenoremunerativo,aplicadescuento, aplicaretencion,aplicaaportepatronal) VALUES(-16,current_timestamp,'SAC','SAC','',1, false, false, false, true, false)")
+		db.Exec("UPDATE CONCEPTO SET tipoimpuestogananciasid = -16 WHERE id = -2")
+
 		if versionConceptoDB < 10 {
 			err = db.Exec("update concepto set tipocalculoautomaticoid = -1 where tipodecalculoid is null").Error
 			err = db.Exec("update concepto set tipocalculoautomaticoid = -2 where tipodecalculoid is not null").Error
@@ -87,7 +90,6 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		}
 
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -1 WHERE ID IN (-1,-3,-4,-15,-16,-17)")
-		db.Exec("UPDATE CONCEPTO SET tipoimpuestogananciasid = -1 WHERE ID = -2")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = true, tipoimpuestogananciasid = -3 WHERE ID IN (-5,-6)")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = false, basesac = false, tipoimpuestogananciasid = -2 WHERE ID IN (-8,-9,-10,-11,-13,-14)")
 		db.Exec("UPDATE CONCEPTO SET prorrateo = true, basesac = true, tipoimpuestogananciasid = -2 WHERE ID = -12")

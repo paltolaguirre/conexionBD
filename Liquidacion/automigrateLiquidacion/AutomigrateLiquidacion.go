@@ -3,7 +3,27 @@ package automigrateLiquidacion
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Liquidacion/structLiquidacion"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+type MicroservicioLiquidacion struct{
+}
+
+func (*MicroservicioLiquidacion) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionLiquidacionConfiguracion(), ObtenerVersionLiquidacionDB(db))
+}
+
+func (*MicroservicioLiquidacion) AutomigrarPublic(db *gorm.DB) error {
+	return AutomigrateLiquidacionTablasPublicas(db)
+}
+
+func (*MicroservicioLiquidacion) AutomigrarPrivate(db *gorm.DB) error {
+	return AutomigrateLiquidacionTablasPublicas(db)
+}
+
+func (*MicroservicioLiquidacion) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionLiquidacionConfiguracion(), Liquidacion, db)
+}
 
 func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 

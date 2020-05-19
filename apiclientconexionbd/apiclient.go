@@ -24,18 +24,21 @@ type Microservicio interface {
 var automigratePublicArray = []Microservicio{&automigrateLegajo.MicroservicioLegajo{}, &automigrateConcepto.MicroservicioConcepto{}, &automigrateLiquidacion.MicroservicioLiquidacion{}, &automigrateSiradig.MicroservicioSiradig{}, &automigrateFunction.MicroservicioFunction{}}
 var automigratePrivateArray = []Microservicio{&automigrateFunction.MicroservicioFunction{}, &automigrateLegajo.MicroservicioLegajo{}, &automigrateConcepto.MicroservicioConcepto{}, &automigrateNovedad.MicroservicioNovedad{}, &automigrateLiquidacion.MicroservicioLiquidacion{}, &automigrateSiradig.MicroservicioSiradig{}}
 
-func AutomigrateTablaSecurity(db *gorm.DB) error {
+func AutomigrateTablaSecurity(db *gorm.DB) (error,bool) {
+
+	actualizo := false
 	var err error
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.ObtenerVersionAutenticacionDB(db)) {
 		if err = automigrateAutenticacion.AutomigrateAutenticacionTablaSecurity(db); err != nil {
-			return err
+			return err, actualizo
 		} else {
+			actualizo = true
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.Security, db)
 		}
 	}
-	return err
+	return err, actualizo
 
 }
 

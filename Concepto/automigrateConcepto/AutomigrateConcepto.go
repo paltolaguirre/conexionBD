@@ -71,7 +71,7 @@ func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
 func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 	//para actualizar tablas...agrega columnas e indices, pero no elimina
-	err := db.AutoMigrate(&structConcepto.Tipocalculoautomatico{}, &structConcepto.Tipoconcepto{}, &structConcepto.Tipodecalculo{}, &structConcepto.Tipoimpuestoganancias{}, &structConcepto.Concepto{}).Error
+	err := db.AutoMigrate(&structConcepto.Tipocalculoautomatico{}, &structConcepto.Tipoconcepto{}, &structConcepto.Tipodecalculo{}, &structConcepto.Tipoimpuestoganancias{}, &structConcepto.Conceptoafip{}, &structConcepto.Concepto{}).Error
 	if err == nil {
 
 		versionConceptoDB := ObtenerVersionConceptoDB(db)
@@ -136,13 +136,42 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("INSERT INTO CONCEPTO(id, created_at, nombre, codigo, descripcion, activo, tipo, cuenta_contable, esimprimible, tipoconceptoid, esnovedad, porcentaje, tipodecalculoid, prorrateo, basesac, tipoimpuestogananciasid, eseditable, tipocalculoautomaticoid, formulanombre, esremvariable) VALUES(-34, current_timestamp,'Dias De Licencia', 'DIAS_DE_LICENCIA',  '', 1, '',-46, true, -3,true, null, null, false, true, -1, true, -1, null, false)")
 		}
 
+		if versionConceptoDB < 16 {
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -1 WHERE id IN (-1,-3,-4,-15,-16,-17)")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -11 WHERE id = -2")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -16 WHERE id = -5")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -17 WHERE id = -6")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -56 WHERE id = -7")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -57 WHERE id = -8")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -59 WHERE id IN (-9,-14)")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -60 WHERE id = -10")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -54 WHERE id = -11")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -52 WHERE id = -12")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -58 WHERE id = -13")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -65 WHERE id = -18")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -66 WHERE id = -19")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -67 WHERE id = -20")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -73 WHERE id = -29")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -69 WHERE id = -31")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -63 WHERE id = -30")
+			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = true, contribucionsipa = true, aportesinssjyp = true, contribucionesinssjyp = true, aportesobrasocial = true, contribucionesobrasocial = true, aportesfondosolidario = true, contribucionesfondosolidario = true, aportesrenatea = true, contribucionesrenatea = true, asignacionesfamiliares = true, contribucionesfondonacional = true, contribucionesleyriesgo = true, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-1,-2,-3,-4,-5,-6,-15,-16,-17)")
+			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = false, contribucionsipa = false, aportesinssjyp = false, contribucionesinssjyp = false, aportesobrasocial = false, contribucionesobrasocial = false, aportesfondosolidario = false, contribucionesfondosolidario = false, aportesrenatea = false, contribucionesrenatea = false, asignacionesfamiliares = false, contribucionesfondonacional = false, contribucionesleyriesgo = true, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-7,-8,-9,-10,-11,-12,-13,-14)")
+			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = false, contribucionsipa = false, aportesinssjyp = false, contribucionesinssjyp = false, aportesobrasocial = false, contribucionesobrasocial = false, aportesfondosolidario = false, contribucionesfondosolidario = false, aportesrenatea = false, contribucionesrenatea = false, asignacionesfamiliares = false, contribucionesfondonacional = false, contribucionesleyriesgo = false, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-18,-19,-20,-29,-30,-31)")
+		}
 	}
 	return err
 }
 
 func ObtenerConceptosPublicos(db *gorm.DB) error {
 
+	versionConceptoDB := ObtenerVersionConceptoDB(db)
+
 	db.Exec("select ST_copy_concepto_public_privado()")
+
+	if versionConceptoDB < 16 {
+		db.Exec("ALTER SEQUENCE concepto_codigointerno_seq RESTART with 1000")
+		db.Exec("UPDATE CONCEPTO SET codigointerno = nextval('concepto_codigointerno_seq') WHERE id > 0")
+	}
 
 	return nil
 }

@@ -3,7 +3,37 @@ package automigrateConcepto
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Concepto/structConcepto"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+type MicroservicioConcepto struct{
+}
+
+func (*MicroservicioConcepto) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionConceptoConfiguracion(), ObtenerVersionConceptoDB(db))
+}
+
+func (*MicroservicioConcepto) AutomigrarPublic(db *gorm.DB) error {
+	 err := AutomigrateConceptoTablasPublicas(db)
+	 return err
+}
+
+func (*MicroservicioConcepto) AutomigrarPrivate(db *gorm.DB) error {
+	if err := AutomigrateConceptoTablasPrivadas(db); err != nil {
+		return err
+	} else {
+		if err = ObtenerConceptosPublicos(db); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (*MicroservicioConcepto) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionConceptoConfiguracion(), Concepto, db)
+}
+
+
 
 func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
@@ -133,49 +163,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 }
 
 func ObtenerConceptosPublicos(db *gorm.DB) error {
-	//var conceptos []structConcepto.Concepto
-	/*var tiposConcepto []structConcepto.Tipoconcepto
-	var tiposCalculo []structConcepto.Tipodecalculo
-	var tiposImpuestoGanancias []structConcepto.Tipoimpuestoganancias
-	var tiposCalculoAutomatico []structConcepto.Tipocalculoautomatico*/
 
-	//db_public := conexionBD.ObtenerDB("public")
-
-	/*db_public.Find(&tiposConcepto)
-	for _, tipoConcepto := range tiposConcepto {
-		if err := db.Save(&tipoConcepto).Error; err != nil {
-			return err
-		}
-	}
-
-	db_public.Find(&tiposCalculo)
-	for _, tipoCalculo := range tiposCalculo {
-		if err := db.Save(&tipoCalculo).Error; err != nil {
-			return err
-		}
-	}
-
-	db_public.Find(&tiposImpuestoGanancias)
-	for _, tipoImpuestoGanancias := range tiposImpuestoGanancias {
-		if err := db.Save(&tipoImpuestoGanancias).Error; err != nil {
-			return err
-		}
-	}
-
-	db_public.Find(&tiposCalculoAutomatico)
-	for _, tipoCalculoAutomatico := range tiposCalculoAutomatico {
-		if err := db.Save(&tipoCalculoAutomatico).Error; err != nil {
-			return err
-		}
-	}*/
-
-	/*db_public.Find(&conceptos)
-	for i := 0; i < len(conceptos); i++ {
-		concepto := conceptos[i]
-		if err := db.Save(&concepto).Error; err != nil {
-			return err
-		}
-	}*/
 	versionConceptoDB := ObtenerVersionConceptoDB(db)
 
 	db.Exec("select ST_copy_concepto_public_privado()")

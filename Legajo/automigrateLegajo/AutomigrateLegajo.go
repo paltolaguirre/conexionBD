@@ -3,7 +3,27 @@ package automigrateLegajo
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Legajo/structLegajo"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+type MicroservicioLegajo struct{
+}
+
+func (*MicroservicioLegajo) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionLegajoConfiguracion(), ObtenerVersionLegajoDB(db))
+}
+
+func (*MicroservicioLegajo) AutomigrarPublic(db *gorm.DB) error {
+	return AutomigrateLegajoTablasPublicas(db)
+}
+
+func (*MicroservicioLegajo) AutomigrarPrivate(db *gorm.DB) error {
+	return AutomigrateLegajoTablasPrivadas(db)
+}
+
+func (*MicroservicioLegajo) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionLegajoConfiguracion(), Legajo, db)
+}
 
 func AutomigrateLegajoTablasPrivadas(db *gorm.DB) error {
 

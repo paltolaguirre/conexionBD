@@ -3,7 +3,28 @@ package automigrateSiradig
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Siradig/structSiradig"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+
+type MicroservicioSiradig struct{
+}
+
+func (*MicroservicioSiradig) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionSiradigConfiguracion(), ObtenerVersionSiradigDB(db))
+}
+
+func (*MicroservicioSiradig) AutomigrarPublic(db *gorm.DB) error {
+	return AutomigrateSiradigTablasPublicas(db)
+}
+
+func (*MicroservicioSiradig) AutomigrarPrivate(db *gorm.DB) error {
+	return AutomigrateSiradigTablasPrivadas(db)
+}
+
+func (*MicroservicioSiradig) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionSiradigConfiguracion(), Siradig, db)
+}
 
 func AutomigrateSiradigTablasPrivadas(db *gorm.DB) error {
 

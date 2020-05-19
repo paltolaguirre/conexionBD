@@ -3,7 +3,27 @@ package automigrateNovedad
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Novedad/structNovedad"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+type MicroservicioNovedad struct{
+}
+
+func (*MicroservicioNovedad) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionNovedadConfiguracion(), ObtenerVersionNovedadDB(db))
+}
+
+func (*MicroservicioNovedad) AutomigrarPublic(db *gorm.DB) error {
+	return nil
+}
+
+func (*MicroservicioNovedad) AutomigrarPrivate(db *gorm.DB) error {
+	return AutomigrateNovedadTablasPrivadas(db)
+}
+
+func (*MicroservicioNovedad) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionNovedadConfiguracion(), Novedad, db)
+}
 
 func AutomigrateNovedadTablasPrivadas(db *gorm.DB) error {
 

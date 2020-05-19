@@ -8,9 +8,10 @@ import (
 
 type Security struct {
 	structGormModel.GormModel
-	Username      string    `json:"username"`
-	Pass          string    `json:"pass"`
-	Tenant        string    `json:"tenant"`
-	Token         string    `json:"token"`
-	FechaCreacion time.Time `json:"fechacreacion"`
+	Username       string    `json:"username"`
+	Pass           string    `json:"pass"`
+	Tenant         string    `json:"tenant"`
+	Token          string    `json:"token"`
+	FechaCreacion  time.Time `json:"fechacreacion"`
+	Necesitaupdate bool      `json:"necesitaupdate"`
 }

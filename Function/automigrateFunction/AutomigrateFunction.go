@@ -336,6 +336,10 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 		}
 
+		if versionFunctionDB < 8 {
+			db.Exec("update function set description = 'Antiguedad tomada a partir del campo \"Fecha de Ingreso\" del Legajo hasta la \"Fecha de la liquidación\"' where name = 'Antiguedad'")
+		}
+
 	}
 	return err
 }

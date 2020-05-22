@@ -6,7 +6,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
 
-type MicroservicioLiquidacion struct{
+type MicroservicioLiquidacion struct {
 }
 
 func (*MicroservicioLiquidacion) NecesitaActualizar(db *gorm.DB) bool {
@@ -18,10 +18,10 @@ func (*MicroservicioLiquidacion) AutomigrarPublic(db *gorm.DB) error {
 }
 
 func (*MicroservicioLiquidacion) AutomigrarPrivate(db *gorm.DB) error {
-	return AutomigrateLiquidacionTablasPublicas(db)
+	return AutomigrateLiquidacionTablasPrivadas(db)
 }
 
-func (*MicroservicioLiquidacion) ActualizarVersion(db *gorm.DB)  {
+func (*MicroservicioLiquidacion) ActualizarVersion(db *gorm.DB) {
 	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionLiquidacionConfiguracion(), Liquidacion, db)
 }
 
@@ -62,7 +62,7 @@ func unificarDatosEnLaTablaLiquidacionItem(db *gorm.DB) error {
 	//abro una transacción para que si hay un error no persista en la DB
 	var err error
 	tx := db.Begin()
-	defer tx.Rollback();
+	defer tx.Rollback()
 
 	if err = insertTablaLiquidacionTipo(tx); err != nil {
 		return err

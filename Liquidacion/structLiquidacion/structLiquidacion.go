@@ -33,5 +33,5 @@ type Liquidacion struct {
 	Asientomanualtransaccionid           int                       `json:"asientomanualtransaccionid"`
 	Asientomanualnombre                  string                    `json:"asientomanualnombre"`
 	Liquidacionitems                     []Liquidacionitem         `json:"liquidacionitems" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
-	Cantidaddiastrabajados               int                       `json:"cantidaddiastrabajados" gorm:"default:30"`
+	Cantidaddiastrabajados               *int                      `json:"cantidaddiastrabajados" gorm:"not null;default:30"`
 }

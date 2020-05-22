@@ -6,7 +6,7 @@ import (
 	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
 
-type MicroservicioConcepto struct{
+type MicroservicioConcepto struct {
 }
 
 func (*MicroservicioConcepto) NecesitaActualizar(db *gorm.DB) bool {
@@ -14,8 +14,8 @@ func (*MicroservicioConcepto) NecesitaActualizar(db *gorm.DB) bool {
 }
 
 func (*MicroservicioConcepto) AutomigrarPublic(db *gorm.DB) error {
-	 err := AutomigrateConceptoTablasPublicas(db)
-	 return err
+	err := AutomigrateConceptoTablasPublicas(db)
+	return err
 }
 
 func (*MicroservicioConcepto) AutomigrarPrivate(db *gorm.DB) error {
@@ -29,11 +29,9 @@ func (*MicroservicioConcepto) AutomigrarPrivate(db *gorm.DB) error {
 	return nil
 }
 
-func (*MicroservicioConcepto) ActualizarVersion(db *gorm.DB)  {
+func (*MicroservicioConcepto) ActualizarVersion(db *gorm.DB) {
 	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionConceptoConfiguracion(), Concepto, db)
 }
-
-
 
 func AutomigrateConceptoTablasPrivadas(db *gorm.DB) error {
 
@@ -154,7 +152,9 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -73 WHERE id = -29")
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -69 WHERE id = -31")
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -63 WHERE id = -30")
-			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = true, contribucionsipa = true, aportesinssjyp = true, contribucionesinssjyp = true, aportesobrasocial = true, contribucionesobrasocial = true, aportesfondosolidario = true, contribucionesfondosolidario = true, aportesrenatea = true, contribucionesrenatea = true, asignacionesfamiliares = true, contribucionesfondonacional = true, contribucionesleyriesgo = true, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-1,-2,-3,-4,-5,-6,-15,-16,-17)")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -21 WHERE id = -32")
+			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -6 WHERE id = -34")
+			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = true, contribucionsipa = true, aportesinssjyp = true, contribucionesinssjyp = true, aportesobrasocial = true, contribucionesobrasocial = true, aportesfondosolidario = true, contribucionesfondosolidario = true, aportesrenatea = true, contribucionesrenatea = true, asignacionesfamiliares = true, contribucionesfondonacional = true, contribucionesleyriesgo = true, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-1,-2,-3,-4,-5,-6,-15,-16,-17,-32,-34)")
 			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = false, contribucionsipa = false, aportesinssjyp = false, contribucionesinssjyp = false, aportesobrasocial = false, contribucionesobrasocial = false, aportesfondosolidario = false, contribucionesfondosolidario = false, aportesrenatea = false, contribucionesrenatea = false, asignacionesfamiliares = false, contribucionesfondonacional = false, contribucionesleyriesgo = true, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-7,-8,-9,-10,-11,-12,-13,-14)")
 			db.Exec("UPDATE CONCEPTO SET marcarepeticion = true, aportesipa = false, contribucionsipa = false, aportesinssjyp = false, contribucionesinssjyp = false, aportesobrasocial = false, contribucionesobrasocial = false, aportesfondosolidario = false, contribucionesfondosolidario = false, aportesrenatea = false, contribucionesrenatea = false, asignacionesfamiliares = false, contribucionesfondonacional = false, contribucionesleyriesgo = false, aportesregimenesdiferenciales = false, aportesregimenesespeciales = false WHERE ID IN (-18,-19,-20,-29,-30,-31)")
 		}

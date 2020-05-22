@@ -3,7 +3,35 @@ package automigrateFunction
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/xubiosueldos/conexionBD/Function/structFunction"
+	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
+
+type MicroservicioFunction struct{
+}
+
+func (*MicroservicioFunction) NecesitaActualizar(db *gorm.DB) bool {
+	return versiondbmicroservicio.ActualizarMicroservicio(ObtenerVersionFunctionConfiguracion(), ObtenerVersionFunctionDB(db))
+}
+
+func (*MicroservicioFunction) AutomigrarPublic(db *gorm.DB) error {
+	return AutomigrateFunctionTablasPublicas(db)
+}
+
+func (*MicroservicioFunction) AutomigrarPrivate(db *gorm.DB) error {
+	if err := AutomigrateFunctionTablasPrivadas(db); err != nil {
+		return err
+	} else {
+		if err = ObtenerFormulasPublicas(db); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (*MicroservicioFunction) ActualizarVersion(db *gorm.DB)  {
+	versiondbmicroservicio.ActualizarVersionMicroservicioDB(ObtenerVersionFunctionConfiguracion(), Function, db)
+}
+
 
 func AutomigrateFunctionTablasPrivadas(db *gorm.DB) error {
 
@@ -308,37 +336,17 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 		}
 
+		if versionFunctionDB < 8 {
+			db.Exec("update function set description = 'Antiguedad tomada a partir del campo \"Fecha de Ingreso\" del Legajo hasta la \"Fecha de la liquidación\"' where name = 'Antiguedad'")
+		}
+
 	}
 	return err
 }
 
 func ObtenerFormulasPublicas(db *gorm.DB) error {
-	/*var formulas []structFunction.Function
-
-	db_public := conexionBD.ObtenerDB("public")
-
-	db_public.Set("gorm:auto_preload", true).Find(&formulas)
-	for i := 0; i < len(formulas); i++ {
-		formula := formulas[i]
-
-		params := formula.Params
-
-		formula.Params = nil
-		if err := db.Save(&formula.Value).Error; err != nil {
-			return err
-		}
-		if err := db.Save(&formula).Error; err != nil {
-			return err
-		}
-		for _, param := range params {
-			if err := db.Save(&param).Error; err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil*/
 
 	db.Exec("select ST_copy_formulas_public_privado()")
+
 	return nil
 }

@@ -12,138 +12,76 @@ import (
 	"github.com/xubiosueldos/conexionBD/versiondbmicroservicio"
 )
 
-func AutomigrateTablaSecurity(db *gorm.DB) error {
+
+
+type Microservicio interface {
+	NecesitaActualizar(*gorm.DB) bool
+	AutomigrarPublic(*gorm.DB) error
+	AutomigrarPrivate(*gorm.DB) error
+	ActualizarVersion(*gorm.DB)
+}
+
+var automigratePublicArray = []Microservicio{&automigrateLegajo.MicroservicioLegajo{}, &automigrateConcepto.MicroservicioConcepto{}, &automigrateLiquidacion.MicroservicioLiquidacion{}, &automigrateSiradig.MicroservicioSiradig{}, &automigrateFunction.MicroservicioFunction{}}
+var automigratePrivateArray = []Microservicio{&automigrateFunction.MicroservicioFunction{}, &automigrateLegajo.MicroservicioLegajo{}, &automigrateConcepto.MicroservicioConcepto{}, &automigrateNovedad.MicroservicioNovedad{}, &automigrateLiquidacion.MicroservicioLiquidacion{}, &automigrateSiradig.MicroservicioSiradig{}}
+
+func AutomigrateTablaSecurity(db *gorm.DB) (error,bool) {
+
+	actualizo := false
 	var err error
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
 	if versiondbmicroservicio.ActualizarMicroservicio(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.ObtenerVersionAutenticacionDB(db)) {
 		if err = automigrateAutenticacion.AutomigrateAutenticacionTablaSecurity(db); err != nil {
-			return err
+			return err, actualizo
 		} else {
+			actualizo = true
 			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateAutenticacion.ObtenerVersionAutenticacionConfiguracion(), automigrateAutenticacion.Security, db)
 		}
 	}
-	return err
+	return err, actualizo
 
 }
 
-func AutomigrateTablasPublicas(db *gorm.DB) error {
-	var err error
+func AutomigrateTablasPublicas(db *gorm.DB) (error, bool) {
 
+	actualizo := false
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
+	for _, microservicio := range automigratePublicArray {
+		if microservicio.NecesitaActualizar(db) {
+			err := microservicio.AutomigrarPublic(db)
 
-		if err = automigrateLegajo.AutomigrateLegajoTablasPublicas(db); err != nil {
-			return err
-		} else {
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.Legajo, db)
-		}
-	}
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
-
-		if err = automigrateConcepto.AutomigrateConceptoTablasPublicas(db); err != nil {
-			return err
-		} else {
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.Concepto, db)
+			if err != nil {
+				return err, false
+			} else {
+				actualizo = true
+				microservicio.ActualizarVersion(db)
+			}
 		}
 	}
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.ObtenerVersionLiquidacionDB(db)) {
-
-		if err = automigrateLiquidacion.AutomigrateLiquidacionTablasPublicas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.Liquidacion, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.ObtenerVersionSiradigDB(db)) {
-
-		if err = automigrateSiradig.AutomigrateSiradigTablasPublicas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
-
-		if err = automigrateFunction.AutomigrateFunctionTablasPublicas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
-		}
-	}
-
-	return err
+	return nil, actualizo
 }
 
 func AutomigrateTablasPrivadas(db *gorm.DB) error {
-	var err error
 
 	versiondbmicroservicio.CrearTablaVersionDBMicroservicio(db)
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.ObtenerVersionFunctionDB(db)) {
-		if err = automigrateFunction.AutomigrateFunctionTablasPrivadas(db); err != nil {
-			return err
-		} else {
-			if err = automigrateFunction.ObtenerFormulasPublicas(db); err != nil {
+	for _, microservicio := range automigratePrivateArray {
+		if microservicio.NecesitaActualizar(db) {
+			err := microservicio.AutomigrarPrivate(db)
+
+			if err != nil {
 				return err
+			} else {
+				microservicio.ActualizarVersion(db)
 			}
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateFunction.ObtenerVersionFunctionConfiguracion(), automigrateFunction.Function, db)
 		}
 	}
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.ObtenerVersionLegajoDB(db)) {
+	return nil
+}
 
-		if err = automigrateLegajo.AutomigrateLegajoTablasPrivadas(db); err != nil {
-			return err
-		} else {
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLegajo.ObtenerVersionLegajoConfiguracion(), automigrateLegajo.Legajo, db)
-		}
-	}
+func ForzarActualizacionPrivados() {
 
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.ObtenerVersionConceptoDB(db)) {
-
-		if err = automigrateConcepto.AutomigrateConceptoTablasPrivadas(db); err != nil {
-			return err
-		} else {
-			if err = automigrateConcepto.ObtenerConceptosPublicos(db); err != nil {
-				return err
-			}
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateConcepto.ObtenerVersionConceptoConfiguracion(), automigrateConcepto.Concepto, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateNovedad.ObtenerVersionNovedadConfiguracion(), automigrateNovedad.ObtenerVersionNovedadDB(db)) {
-		if err = automigrateNovedad.AutomigrateNovedadTablasPrivadas(db); err != nil {
-			return err
-		} else {
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateNovedad.ObtenerVersionNovedadConfiguracion(), automigrateNovedad.Novedad, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.ObtenerVersionLiquidacionDB(db)) {
-		if err = automigrateLiquidacion.AutomigrateLiquidacionTablasPrivadas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateLiquidacion.ObtenerVersionLiquidacionConfiguracion(), automigrateLiquidacion.Liquidacion, db)
-		}
-	}
-
-	if versiondbmicroservicio.ActualizarMicroservicio(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.ObtenerVersionSiradigDB(db)) {
-		if err = automigrateSiradig.AutomigrateSiradigTablasPrivadas(db); err != nil {
-			return err
-		} else {
-
-			versiondbmicroservicio.ActualizarVersionMicroservicioDB(automigrateSiradig.ObtenerVersionSiradigConfiguracion(), automigrateSiradig.Siradig, db)
-		}
-	}
-
-	return err
 }

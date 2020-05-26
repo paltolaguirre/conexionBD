@@ -135,6 +135,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 		}
 
 		if versionConceptoDB < 16 {
+			db.Exec("SELECT ST_LLENARCONCEPTOAFIP()")
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -1 WHERE id IN (-1,-3,-4,-15,-16,-17)")
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -11 WHERE id = -2")
 			db.Exec("UPDATE CONCEPTO SET conceptoafipid = -16 WHERE id = -5")

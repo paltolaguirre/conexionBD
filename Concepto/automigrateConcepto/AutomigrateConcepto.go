@@ -169,6 +169,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("update concepto set formulanombre = 'IntegracionMesDespido', tipocalculoautomaticoid = -3 where nombre = 'Integración Mes de despido'")
 		}
 		if versionConceptoDB < 18 {
+			db.Exec("update concepto set tipocalculoautomaticoid = -3 where id = -35")
 			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid = -3")
 		}
 	}

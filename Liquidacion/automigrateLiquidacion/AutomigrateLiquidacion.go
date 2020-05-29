@@ -48,6 +48,10 @@ func AutomigrateLiquidacionTablasPrivadas(db *gorm.DB) error {
 			db.Exec("ALTER TABLE liquidacion ALTER COLUMN legajoid SET NOT NULL")
 		}
 
+		if versionLiquidacionDB < 10 {
+			db.Exec("UPDATE liquidacion SET situacionrevistaunoid = le.situacionid, fechasituacionrevistauno = fechaperiodoliquidacion FROM legajo as le where liquidacion.legajoid = le.id")
+		}
+
 	}
 	return err
 }

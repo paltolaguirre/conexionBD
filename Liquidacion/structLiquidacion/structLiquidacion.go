@@ -34,4 +34,13 @@ type Liquidacion struct {
 	Asientomanualnombre                  string                    `json:"asientomanualnombre"`
 	Liquidacionitems                     []Liquidacionitem         `json:"liquidacionitems" gorm:"ForeignKey:Liquidacionid;association_foreignkey:ID"`
 	Cantidaddiastrabajados               *int                      `json:"cantidaddiastrabajados" gorm:"not null;default:30"`
+	Situacionrevistauno                  *structLegajo.Situacion   `json:"situacionrevistauno" gorm:"ForeignKey:Situacionid;association_foreignkey:ID;association_autoupdate:false;not null;"`
+	Situacionrevistaunoid                *int                      `json:"situacionrevistaunoid" sql:"type:int REFERENCES Situacion(ID)" gorm:"not null;default:-28"`
+	Situacionrevistados                  *structLegajo.Situacion   `json:"situacionrevistados" gorm:"ForeignKey:Situacionid;association_foreignkey:ID;association_autoupdate:false"`
+	Situacionrevistadosid                *int                      `json:"situacionrevistadosid" sql:"type:int REFERENCES Situacion(ID)"`
+	Situacionrevistatres                 *structLegajo.Situacion   `json:"situacionrevistatres" gorm:"ForeignKey:Situacionid;association_foreignkey:ID;association_autoupdate:false"`
+	Situacionrevistatresid               *int                      `json:"situacionrevistatresid" sql:"type:int REFERENCES Situacion(ID)"`
+	Fechasituacionrevistauno             *time.Time                `json:"fechasituacionrevistauno" gorm:"not null;default:current_timestamp"`
+	Fechasituacionrevistados             *time.Time                `json:"fechasituacionrevistados"`
+	Fechasituacionrevistatres            *time.Time                `json:"fechasituacionrevistatres"`
 }

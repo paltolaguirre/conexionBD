@@ -172,6 +172,16 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("update concepto set tipocalculoautomaticoid = -3 where id = -35")
 			db.Exec("update concepto set eseditable = false where tipocalculoautomaticoid = -3")
 		}
+
+		if versionConceptoDB < 19 {
+			db.Exec("update concepto set cuenta_contable = -46, cuentacontablepasivoid = -49 where tipoconceptoid = -1 or tipoconceptoid = -2")
+			db.Exec("update concepto set cuenta_contable = -49, cuentacontablepasivoid = -46 where tipoconceptoid = -3")
+			db.Exec("update concepto set cuenta_contable = -49, cuentacontablepasivoid = -48 where tipoconceptoid = -4")
+			db.Exec("update concepto set cuenta_contable = -47, cuentacontablepasivoid = -48 where tipoconceptoid = -5")
+			db.Exec("update concepto set cuenta_contable = -49, cuentacontablepasivoid = -24 where id = -29")
+			db.Exec("update concepto set cuenta_contable = -24, cuentacontablepasivoid = -24 where id = -49")
+
+		}
 	}
 	return err
 }

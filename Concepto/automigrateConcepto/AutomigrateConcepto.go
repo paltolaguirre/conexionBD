@@ -179,7 +179,7 @@ func AutomigrateConceptoTablasPublicas(db *gorm.DB) error {
 			db.Exec("update concepto set cuenta_contable = -49, cuentacontablepasivoid = -48 where tipoconceptoid = -4")
 			db.Exec("update concepto set cuenta_contable = -47, cuentacontablepasivoid = -48 where tipoconceptoid = -5")
 			db.Exec("update concepto set cuenta_contable = -49, cuentacontablepasivoid = -24 where id = -29")
-			db.Exec("update concepto set cuenta_contable = -24, cuentacontablepasivoid = -24 where id = -49")
+			db.Exec("update concepto set cuenta_contable = -24, cuentacontablepasivoid = -49 where id = -30")
 
 		}
 	}

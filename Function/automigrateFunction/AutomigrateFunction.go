@@ -336,6 +336,15 @@ func AutomigrateFunctionTablasPublicas(db *gorm.DB) error {
 
 		}
 
+		if versionFunctionDB < 8 {
+			db.Exec("update function set description = 'Antiguedad tomada a partir del campo \"Fecha de Ingreso\" del Legajo hasta la \"Fecha de la liquidación\"' where name = 'Antiguedad'")
+		}
+
+		if versionFunctionDB < 9 {
+			db.Exec("INSERT INTO value(id, created_at, name, valuenumber, valuestring, valueboolean, valueinvokeid, arginvokeid) VALUES(-66,current_timestamp,'return',0,'',false,null,0)")
+			db.Exec("INSERT INTO function(name, created_at, description, origin, type, scope, result, valueid) VALUES('CantidadConcepto', current_timestamp, 'Valor del campo \"Cantidad\" al momento de utilizar el concepto que tenga relacionada esta formula dentro de la liquidación.', 'primitive', 'helper', 'public', 'number', -66)")
+		}
+
 	}
 	return err
 }

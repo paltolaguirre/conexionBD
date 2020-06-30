@@ -50,3 +50,7 @@ func ObtenerDB(tenant string) *gorm.DB {
 func CerrarDB(db *gorm.DB) {
 	db.DB().Close()
 }
+
+func LockTable(db *gorm.DB, tablename string){
+	db.Exec("lock table only " + tablename + " IN ACCESS EXCLUSIVE MODE")
+}

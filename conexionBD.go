@@ -52,5 +52,5 @@ func CerrarDB(db *gorm.DB) {
 }
 
 func LockTable(db *gorm.DB, tablename string){
-	db.Exec("lock table only " + tablename + " IN ACCESS EXCLUSIVE MODE")
+	db.Exec("select * from " + tablename + " FOR UPDATE")
 }

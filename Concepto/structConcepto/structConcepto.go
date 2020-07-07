@@ -53,4 +53,5 @@ type Concepto struct {
 	Aportesregimenesespeciales    bool                     `json:"aportesregimenesespeciales" gorm:"default:false"`
 	Cuentacontablepasivoid        *int                     `json:"cuentacontablepasivoid"`
 	Cuentacontablepasivo          *Cuenta                  `json:"cuentacontablepasivo"`
+	Esganancias                   bool                     `json:"esganancias" gorm:"default:false"`
 }

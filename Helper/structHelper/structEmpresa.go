@@ -11,6 +11,7 @@ type Empresa struct {
 	Actividad              string `json:"actividad"`
 	Actividadnombre        string `json:"actividadnombre"`
 	Tipodeempresa          int    `json:"tipodeempresa"`
+	Zonaid                 int    `json:"zonaid"`
 	Zona                   string `json:"zona"`
 	Zonanombre             string `json:"zonanombre"`
 	Obrasocial             int    `json:"obrasocial"`

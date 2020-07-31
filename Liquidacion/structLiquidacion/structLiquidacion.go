@@ -43,6 +43,6 @@ type Liquidacion struct {
 	Fechasituacionrevistauno             *time.Time                `json:"fechasituacionrevistauno" gorm:"not null;default:current_timestamp"`
 	Fechasituacionrevistados             *time.Time                `json:"fechasituacionrevistados"`
 	Fechasituacionrevistatres            *time.Time                `json:"fechasituacionrevistatres"`
-	Zonaid                               *int                      `json:"zonaid"`
-	Zona                                 *Zona                     `json:"zona"`
+	Zonaid                               *int                      `json:"zonaid" gorm:"ForeignKey:zonaid;association_foreignkey:ID;association_autoupdate:false"`
+	Zona                                 *Zona                     `json:"zona" sql:"type:int REFERENCES Zona(ID)"`
 }

@@ -9,5 +9,6 @@ type Zona struct {
 	Nombre      string `json:"nombre"`
 	Codigo      string `json:"codigo"`
 	Descripcion string `json:"descripcion"`
+	Reduccion   string `json:"reduccion"`
 	Activo      int    `json:"activo"`
 }

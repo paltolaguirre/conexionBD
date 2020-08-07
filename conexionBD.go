@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/xubiosueldos/framework/configuracion"
+	"github.com/xubio-inc/sueldos-lib-framework/configuracion"
 )
 
 func ConnectBD(tenant string) *gorm.DB {
